@@ -1,0 +1,17 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        int frontNotBuy=0;
+        int frontBuy=0;
+        int currNotBuy=0;
+        int currBuy=0;
+        for(int i=n-1;i>=0;i--){
+            currBuy=max(-prices[i]+frontNotBuy,frontBuy);
+            currNotBuy=max(prices[i]+frontBuy,frontNotBuy);
+            frontBuy=currBuy;
+            frontNotBuy=currNotBuy;
+        }
+        return frontBuy;
+    }
+};
