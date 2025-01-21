@@ -1,0 +1,60 @@
+# Approach---
+
+Approach:
+1.Initialization:
+->n stores the length of the input string s.
+->ans is initialized as an empty string, which will hold the final reversed words.
+->i is used as a pointer to traverse the string.
+
+
+2.Iterate Through the String:
+->A while loop iterates through the string from the beginning to the end using the pointer i.
+
+3.Skip Leading Spaces:
+->Inside the loop, skip all leading spaces by incrementing i while s[i] is a space character (' ').
+
+4.Extract a Word:
+Start collecting the characters of the current word in a temporary string temp until the next space or end of the string is encountered.
+Add the Word to the Result:
+
+5.After forming a word (temp):
+If ans is empty (first word), set ans to temp.
+Otherwise, prepend temp to ans and add a space between the new word and the existing reversed words. This ensures the order of words is reversed.
+
+6.Repeat for All Words:
+Continue the process of skipping spaces, collecting words, and updating the result string until the end of the input string is reached.
+Return the Result:
+
+The final reversed string ans is returned, containing all words in reverse order with no extra spaces.
+
+class Solution {
+public:
+    string reverseWords(string s) {
+        int n = s.length();
+        string ans = "";
+        int i = 0;
+        while (i < n) {
+            string temp;
+            // Skip leading spaces
+            while (i < n && s[i] == ' ') {
+                i++;
+            }
+            // Collect characters of the current word
+            while (i < n && s[i] != ' ') {
+                temp += s[i];
+                i++;
+            }
+            // Add the word to the result
+            if (!temp.empty()) {
+                if (ans.empty()) {
+                    ans = temp;
+                } else {
+                    ans = temp + " " + ans;
+                }
+            }
+        }
+        return ans;
+       
+    }
+};
+        
