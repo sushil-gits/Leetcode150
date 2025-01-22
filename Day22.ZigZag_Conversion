@@ -1,0 +1,64 @@
+Approach
+Problem Understanding
+1.The zigzag pattern means characters in the string are written in a zigzag fashion row by row, alternating downwards and upwards.
+2.Once the pattern is created, the result is read row by row, concatenating all characters in each row.
+
+Implementation
+The implementation uses two techniques:
+
+1.Dynamic Row Assignment (Commented Code):
+A vector of strings is created, with one string for each row.
+Characters from the string s are assigned to rows in zigzag order using a direction indicator (dir).
+Result is constructed by concatenating all rows.
+
+2.Efficient Zigzag Simulation:
+The zigzag pattern is simulated mathematically by determining gaps between consecutive characters in the zigzag rows:
+Gap: 2 * (r - 1) is the full cycle length in the zigzag pattern.
+Each row has two possible jumps (step1 and step2) based on its position (i) in the rows.
+Characters are added to a result vector row by row using these calculated steps.
+
+class Solution {
+public:
+    string convert(string s, int r) {
+        
+        // if(numRows<=1) return s;
+        // vector<string>v(numRows, "");
+        //     int j=0,dir=-1;
+        //     for(int i=0;i<s.length();i++)
+        //     {
+        //         if(j==numRows-1||j==0)dir*=(-1);
+        //         v[j]+=s[i];
+        //         if(dir==1) j++;
+        //         else j--;
+        //     }
+        //     string res;
+        //     for(auto &it:v) res+=it;
+        //     return res;
+
+         if (r==1) return s;
+        vector <char> ans;
+        int n = s.size();
+        int gap = 2 * (r - 1);
+        for (int i = 0; i < r; i++) {
+            int j = i;
+            int step1 = gap - 2 * i; 
+            int step2 = 2 * i;
+            int flag = 0;
+            while (j < n) {
+                if (i == 0 || i == r - 1) {
+                    ans.push_back(s[j]);
+                    j += gap;
+                }
+                else {
+                    ans.push_back(s[j]);
+                    if (flag % 2 == 0)
+                        j += step1;
+                    else
+                        j += step2;
+                    flag++;
+                }
+            }
+        }
+        return string(ans.begin(), ans.end());  // Convert vector to string.
+            }
+};
