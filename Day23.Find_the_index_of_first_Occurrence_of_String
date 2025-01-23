@@ -1,0 +1,108 @@
+1. Brute Force Approach
+Idea:
+Compare the needle string with all substrings of haystack starting from each possible index.
+Check for a match and return the starting index if found.
+Implementation:
+Iterate through the haystack with a loop that allows checking substrings of length m (the length of needle).
+For each position i, compare the substring of haystack starting at i with needle.
+If all characters match, return i. If no match is found, return -1.
+Implementation:
+Iterate through the haystack with a loop that allows checking substrings of length m (the length of needle).
+For each position i, compare the substring of haystack starting at i with needle.
+If all characters match, return i. If no match is found, return -1.
+
+2. Knuth-Morris-Pratt (KMP) Algorithm
+Idea:
+Use a preprocessing step to create the Longest Prefix Suffix (LPS) array for the needle.
+The LPS array stores the length of the longest prefix that is also a suffix for every prefix of the string.
+Use the LPS array to avoid unnecessary comparisons in the haystack, improving efficiency.
+Steps:
+Build the LPS array:
+
+Traverse the needle string and compute the LPS values.
+If there’s a mismatch, use the LPS array to determine the next position to compare, rather than starting over.
+Search:
+
+Use two pointers (first for haystack and second for needle).
+Compare characters, and if there’s a mismatch, move second based on the LPS array.
+
+
+3. Optimized Sliding Window (Two-Pointer Approach)
+Idea:
+Instead of creating a new substring for each comparison, directly use two pointers to compare the characters of needle and haystack.
+When there’s a mismatch, reset the pointer in haystack to the next possible starting position.
+Steps:
+Use two pointers:
+i traverses haystack.
+j traverses needle.
+If characters match, move both pointers forward.
+If they don’t match:
+Reset j to 0.
+Move i back to the next starting position in haystack.
+
+
+
+class Solution {
+public:
+// void lpsfind(vector<int>&lps, string s) {
+//         // Your code goes here
+        
+//         int pre=0,suf=1;
+//         while(suf<s.size()){
+//             if(s[pre]==s[suf]){
+//                 lps[suf]=pre+1;
+//                 pre++,suf++;
+                
+//             }
+//             else{
+//                 if(pre==0){
+//                     lps[suf]=0;
+//                     suf++;
+//                 }
+//                 else{
+//                     pre=lps[pre-1];
+//                 }
+//             }
+//         }
+        
+//     }
+    int strStr(string haystack, string needle) {        
+            //  vector<int>lps(needle.size(),0);
+            //  lpsfind(lps,needle);
+            //  int first=0,second=0;
+            //  while(haystack.size()&& second<needle.size()){
+            //     // match
+            //     if(haystack[first]==needle[second]){
+            //         first++,second++;
+            //     }
+            //     // not match
+            //     else
+            //     {
+            //         if(second==0)
+            //         first++;
+            //         else
+            //         second=lps[second-1];
+            //     }
+            //  }
+            // //  answer exit
+            // if(second==needle.size())
+            // return first-second;
+            // return -1;
+            // }
+            int n=haystack.size(),m=needle.size();
+            for(int i=0;i<=n-m;i++){
+                int first=i;
+               int second=0;
+                while(second<m){
+                    if(haystack[first]!=needle[second])
+                    break;
+                    second++,first++;
+                }
+                if(second==m)
+                return i;
+
+            }
+          return -1;  
+    }
+  
+};
