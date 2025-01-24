@@ -1,0 +1,121 @@
+#Approach
+1. Core Idea
+The task is to format a list of words into lines of text where each line:
+Has a width of maxWidth characters.
+Spaces between words are evenly distributed, with extra spaces added from left to right if required.
+The last line is left-aligned, and extra spaces are added only at the end of the line.
+2. Functions and Their Purpose
+fn Function:
+This helper function formats a single line of text from words[j] to words[i] based on the provided constraints:
+Last Line: If it's the last line, the words are left-aligned, and spaces are added to the end to reach maxWidth.
+Single Word Line: If there's only one word, it is left-aligned, and the rest is padded with spaces.
+General Case: Distribute spaces evenly between words. If there are extra spaces, add them starting from the leftmost gap.
+fullJustify Function:
+This function iterates through the list of words and groups them into lines. It uses the helper function fn to format each line.
+3. Steps in fullJustify
+Initialization:
+
+Variables j, i, sum, and space are initialized:
+j marks the start of the current line.
+i iterates through the words array.
+sum keeps track of the total number of characters in the current line (excluding spaces).
+space tracks the number of spaces between words.
+Group Words into Lines:
+
+For each word:
+If the current line can accommodate the word (checked via sum + words[i].size() + space <= maxWidth), add the word's length to sum and increment space.
+Otherwise, the current line is full:
+Format it using fn and add it to the result ans.
+Reset sum, space, and j for the next line.
+Handle the Last Line:
+
+After the loop, the remaining words are formatted as the last line using fn.
+4. Steps in fn
+Determine the Case:
+Check whether the current line is:
+Last Line: If the last line, left-align the words and add spaces to the end.
+Single Word: If only one word in the line, left-align it and pad the end with spaces.
+General Case: Evenly distribute spaces between words.
+Calculate Spaces:
+Compute the number of spaces (rem) and distribute them among the gaps:
+rem is the total remaining space after accounting for word lengths.
+Extra spaces (extra) are distributed from left to right.
+Construct the line by appending words and spaces in the desired format.
+5. Key Variables
+words: List of words to be justified.
+maxWidth: Maximum width of each line.
+ans: Resultant list of fully justified lines.
+j, i: Indices to track the start and end of the current line.
+sum: Total characters in the current line (excluding spaces).
+space: Number of spaces required between words.
+
+
+class Solution {
+public:
+    string fn(vector<string>& words, int i, int j, int maxWidth, int sum) {
+        int space = i - j;
+        int rem = maxWidth - sum;
+        string s;
+        if (i == words.size() - 1)
+        {
+            while (j <= i)
+            {
+                s += words[j++];
+                if (j <= i) s += ' ';
+            }
+            while (s.size() < maxWidth) s += ' ';
+        } 
+        else if (space == 0)
+         {
+            s = words[i];
+            while (s.size() < maxWidth) s += ' ';
+        } 
+        else
+        {
+            int extra = rem % space;
+            rem /= space;
+            string t(rem, ' ');
+            for (; j < i; ++j)
+             {
+                s += words[j];
+                s += t;
+                if (extra > 0) 
+                {
+                    s += ' ';
+                    extra--;
+                }
+            }
+            s += words[i];
+        }
+        return s;
+    }
+
+    vector<string> fullJustify(vector<string>& words, int maxWidth) 
+    {
+        vector<string> ans;
+        int j = 0, i = 0, sum = 0, space = 0;
+        for (; i < words.size(); i++) 
+        {
+            if (sum == 0)
+             {
+                sum += words[i].size();
+            } 
+            else {
+                space++;
+                if (sum + words[i].size() + space <= maxWidth) 
+                {
+                    sum += words[i].size();
+                } 
+                else
+                 {
+                    ans.push_back(fn(words, i - 1, j, maxWidth, sum));
+                    sum = words[i].size();
+                    j = i;
+                    space = 0;
+                }
+            }
+        }
+        ans.push_back(fn(words, i - 1, j, maxWidth, sum));
+        return ans;
+    }
+};
