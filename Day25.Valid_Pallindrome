@@ -1,0 +1,44 @@
+Initialization:
+Define two pointers:
+left initialized to the start of the string (0).
+right initialized to the end of the string (s.size() - 1).
+
+Iterate until the pointers meet:
+Use a while loop that runs as long as left < right.
+
+Skip non-alphanumeric characters:
+Use the isalnum() function to check if a character is alphanumeric. If not:
+Increment left until an alphanumeric character is found.
+Decrement right until an alphanumeric character is found.
+
+Compare the characters:
+After skipping non-alphanumeric characters:
+Convert both s[left] and s[right] to lowercase using tolower().
+Compare the characters. If they are not equal, return false.
+
+Move the pointers:
+If the characters are equal, move the left pointer one step forward (left++) and the right pointer one step backward (right--).
+
+Return true if the loop completes:
+If the loop completes without finding a mismatch, the string is a valid palindrome. Return true.
+
+
+
+class Solution {
+public:
+    bool isPalindrome(string s)
+    {
+        int left=0, right=s.size()-1;
+        while (left<right) {
+            while (left<right && !isalnum(s[left]))
+                left++;
+            while (left<right && !isalnum(s[right]))
+                right--;
+            if (tolower(s[left])!=tolower(s[right]))
+                return false;
+            left++;
+            right--;
+        }
+        return true;
+    }
+};
