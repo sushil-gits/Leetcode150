@@ -1,0 +1,36 @@
+Sliding Window Approach:
+Initialize Variables:
+
+Use two pointers, left and right, to represent the boundaries of the sliding window. Start both at 0.
+Use a hash set (or hash map) to store the characters in the current window.
+Maintain a variable maxLength to store the maximum length of the substring without repeating characters.
+Expand the Window:
+
+Move the right pointer to expand the window. For each character at s[right]:
+If the character is not in the set:
+Add the character to the set.
+Update maxLength as the larger value between maxLength and the current window size (right - left + 1).
+If the character is already in the set:
+Shrink the window from the left by moving the left pointer until the duplicate character is removed. This ensures the substring remains unique.
+Continue Until End of String:
+
+Keep moving the right pointer until it reaches the end of the string.
+Return the Result:
+
+Return the value of maxLength after the loop ends.
+
+
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+       if (s.empty()){
+      return true;
+    }
+    int i = 0;
+    for (const char c : t){
+      if (s[i] == c && ++i == s.length())
+        return true;
+    }
+    return false;  
+    }
+};
