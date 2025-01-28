@@ -1,0 +1,55 @@
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        int n = height.size(); 
+
+        int start = 0; 
+        int end = n - 1;
+
+        int area = 0; 
+        int result = 0; 
+        
+        while (start < end) {
+            int breadth = end - start; // Calculate the distance (breadth) between the two pointers
+            area = breadth * min(height[start], height[end]); // Calculate the area between the two lines
+            result = max(area, result);
+
+            // Move the pointer pointing to the shorter line towards the center
+            if (height[start] <= height[end]) {
+                start++;
+            } else {
+                end--;
+            }
+        } 
+
+        return result; 
+    }
+};
+
+Approach for maxArea
+The problem aims to find the maximum area of water that can be contained between two vertical lines, given their heights in the array height. The solution uses the two-pointer technique for optimal efficiency.
+
+Steps:
+Input and Output:
+Input: A vector height representing the heights of the vertical lines.
+Output: An integer representing the maximum area of water that can be contained.
+Initialization:
+start = 0: Initialize a pointer at the beginning of the array.
+end = n - 1: Initialize a pointer at the end of the array.
+result = 0: To store the maximum area found.
+Core Logic (Using the Two-Pointer Approach):
+
+Use a while loop that runs as long as start < end.
+Calculate the area:
+The breadth is the horizontal distance between start and end (breadth = end - start).
+The height of the container is determined by the shorter of the two lines (min(height[start], height[end])).
+The area is breadth * min(height[start], height[end]).
+Update the result:
+Compare the current area with result and store the maximum: result = max(area, result).
+Move the Pointers:
+
+The pointer pointing to the shorter height is moved inward because moving the taller line would not result in a larger area:
+If height[start] <= height[end], increment start.
+Else, decrement end.
+Return the Result:
+After the loop completes, result holds the maximum area found.
