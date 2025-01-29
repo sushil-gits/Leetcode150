@@ -1,0 +1,106 @@
+Approach: Two-Pointer Method (Without Using Map/Set)
+1️⃣ Sorting the Array
+First, sort the array in ascending order. This helps in efficiently finding pairs using the two-pointer technique.
+Sorting takes O(N log N) time.
+2️⃣ Fix One Element and Use Two-Pointer Approach
+We iterate through the array and fix one element (nums[i]).
+nums[i]+nums[left]+nums[right]=0
+3️⃣ Handling Duplicates
+Skip duplicate values for nums[i] to ensure we don't count the same triplet multiple times.
+Similarly, after finding a valid triplet, move the left and right pointers past duplicate values to avoid duplicate triplets.
+4️⃣ Two-Pointer Search for Two Numbers
+After fixing nums[i], we set:
+left = i + 1 (next element)
+right = n - 1 (last element)
+Use a while loop (left < right) to check the sum:
+Case 1: sum == 0 → Found a valid triplet! Store it in the result and move both pointers.
+Case 2: sum < 0 → Increase left to get a larger sum.
+Case 3: sum > 0 → Decrease right to get a smaller sum.
+This ensures that we find all valid triplets efficiently in O(N²) time.
+5️⃣ Edge Case Handling
+Arrays with all positive or all negative numbers → No valid triplets exist.
+Arrays with multiple zeros → Should correctly return {0, 0, 0} only once.
+Arrays with duplicate numbers → Avoid counting the same triplet multiple times.
+⏳ Time & Space Complexity Analysis
+Time Complexity:
+Sorting takes O(N log N).
+The two-pointer approach runs in O(N) for each element.
+Since we iterate through each element O(N) times, the total complexity is O(N²).
+Space Complexity:
+O(1) (constant extra space) since we are only using the input array and a result vector.
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        // map<int,int>m;
+        // sort(nums.begin(),nums.end());
+        // set<vector<int>> s;
+        // int n = nums.size();
+        // for(int i = 0; i < n;i++){
+        //     int ele = nums[i];
+        //     int l = i+1;
+        //     int r = n-1;
+        //     while( l < r){
+        //         int lel = nums[l];
+        //         int rel = nums[r];
+        //         int val = lel + rel + ele;
+        //         if(val > 0) {
+        //             r--;
+        //         }
+        //         else if(val == 0){
+        //             s.insert({ele,lel,rel});
+        //             l++;
+        //             r--;
+        //         }
+        //         else {
+        //             l++;
+        //         }
+
+        //     }
+        // }
+        // vector<vector<int>> v;
+        // for(auto i : s){
+        //     v.push_back(i);
+        // }
+        // return v;
+         vector<vector<int>> result;
+    int n = nums.size();
+    
+    // Step 1: Sort the array to apply two-pointer technique
+    sort(nums.begin(), nums.end());
+
+    // Step 2: Iterate through the array
+    for (int i = 0; i < n - 2; i++) {
+        // Skip duplicates for the first number
+        if (i > 0 && nums[i] == nums[i - 1]) continue;
+
+        int left = i + 1, right = n - 1;
+        
+        // Two-pointer search for pair that sums to -nums[i]
+        while (left < right) {
+            long long sum = (long long)nums[i] + nums[left] + nums[right]; // Use long long to avoid integer overflow
+
+            if (sum == 0) {
+                result.push_back({nums[i], nums[left], nums[right]});
+
+                // Move both pointers and avoid duplicates
+                while (left < right && nums[left] == nums[left + 1]) left++;
+                while (left < right && nums[right] == nums[right - 1]) right--;
+
+                left++;
+                right--;
+            } 
+            else if (sum < 0) {
+                left++;
+            } 
+            else {
+                right--;
+            }
+        }
+    }
+
+    return result;
+
+   
+    }
+};
