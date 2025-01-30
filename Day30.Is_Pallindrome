@@ -1,0 +1,50 @@
+Approach: Checking Palindrome Without Extra Space
+The given C++ function determines whether an integer is a palindrome without converting it to a string. Below is the detailed approach:
+
+1. Handle Negative and Trailing Zero Cases
+If x is negative (x < 0), return false immediately because negative numbers can't be palindromes.
+If x ends with a zero (x % 10 == 0) but is not zero itself, return false. (e.g., 10 is not a palindrome)
+2. Reverse Half of the Number
+Initialize p = 0, which will store the reversed half of x.
+Use a while loop to build p digit by digit until x becomes less than or equal to p:
+Extract the last digit: x % 10
+Append this digit to p: p = p * 10 + (x % 10)
+Remove the last digit from x: x /= 10
+This process continues until x ≤ p, meaning we have reversed at least half the number.
+3. Check for Palindrome
+A number is a palindrome if:
+x == p (even-length palindromes)
+x == p / 10 (odd-length palindromes, where the middle digit is ignored)
+The second condition handles cases like 121, where p = 12 and x = 12 after reversing half the number.
+Time & Space Complexity
+Time Complexity: 
+𝑂
+(
+log
+⁡
+𝑥
+)
+O(logx), because we're reducing x by a factor of 10 in each iteration.
+Space Complexity: 
+𝑂
+(
+1
+)
+O(1), as we use only a few integer variables.
+
+
+class Solution {
+public:
+    bool isPalindrome(int x) {
+
+      if(x<0 || (x!=0 && x%10==0))
+      return false;
+      int p=0;
+      while(x>p)
+      {
+        p=p*10+x%10;
+        x/=10;
+      }  
+      return (x==p)||(x==p/10);
+    }
+};
