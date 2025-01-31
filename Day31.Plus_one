@@ -1,0 +1,63 @@
+Approach to Solve the "Plus One" Problem Efficiently
+1. Understanding the Problem
+We are given a non-negative integer represented as a vector of digits, where each digit represents a single place value (like an array representation of a number). Our task is to increment this number by one and return the updated vector.
+
+2. Observations
+Since the number is stored in a vector, leading zeros do not exist (except for the number 0 itself).
+The most significant digit is at the start (leftmost), and the least significant digit is at the end (rightmost).
+A simple increment might cause a carry (e.g., 999 + 1 = 1000, where all digits change).
+We need to handle cases where adding one propagates a carry throughout the entire number.
+Approach (Efficient O(n) solution)
+Step 1: Traverse from Right to Left
+Start iterating from the last digit (rightmost, least significant digit).
+Check if adding one creates a carry.
+Step 2: Handling Carry
+If the current digit is less than 9, simply increment it and return the vector.
+If the current digit is 9, setting it to 0 will cause a carry to propagate to the next digit.
+Step 3: Handle Edge Case (All 9s)
+If all digits were 9, the number becomes a power of 10 (e.g., 999 → 1000).
+We need to insert a 1 at the beginning and set all other digits to 0.
+
+
+
+
+class Solution {
+public:
+//    not the correct way to increment
+    // vector<int> plusOne(vector<int>& digits) {
+    //     int num=0;
+    //     vector<int>ans;
+    //     int n=digits.size();
+    //     for(int i=0;i<n;i++)
+    //     {
+    //       num+=pow(10,n-i-1)*digits[i];
+    //       num++;
+    //     }
+    //     for(int i=0;i<n;i++)
+    //     {
+    //         ans.push_back(num/pow(10,n-i-1));
+    //         num=num%pow(10,n-i-1);
+    //     }
+    //     return ans;
+    // }
+
+// another approach
+    vector<int> plusOne(vector<int>& digits) {
+    int n = digits.size();
+    
+    // Start from the last digit and handle carry
+    for(int i = n - 1; i >= 0; i--) {
+        if (digits[i] < 9) {
+            digits[i]++;  // Simply increment the last non-9 digit
+            return digits;
+        }
+        digits[i] = 0; // Set to 0 if it's 9 and continue
+    }
+    
+    // If we reached here, it means all digits were 9 (e.g., 999 -> 1000)
+    digits.insert(digits.begin(), 1);
+    
+    return digits;
+}
+
+};
