@@ -1,0 +1,122 @@
+Approach: Computing the Square Root Using Binary Search
+1️⃣ Understanding the Problem
+We need to compute the integer square root of a given number x.
+The square root of x is the largest integer r such that 
+𝑟
+2
+≤
+𝑥
+r 
+2
+ ≤x.
+We should not use built-in functions like sqrt(x).
+The problem requires efficient computation, especially for large x.
+2️⃣ Thought Process
+Since the square root function is monotonic (increasing function), Binary Search is a perfect approach.
+We search for r such that 
+𝑟
+2
+≤
+𝑥
+r 
+2
+ ≤x and 
+(
+𝑟
++
+1
+)
+2
+>
+𝑥
+(r+1) 
+2
+ >x.
+3️⃣ Steps to Solve the Problem
+Step 1: Handle Edge Case
+If x == 0, return 0 immediately.
+Step 2: Binary Search on Possible Square Roots
+Set left = 1 and right = x (since sqrt(x) never exceeds x).
+Compute mid as the middle of the search range.
+Check conditions:
+If 
+𝑚
+𝑖
+𝑑
+2
+=
+=
+𝑥
+mid 
+2
+ ==x, return mid (exact square root found).
+If 
+𝑚
+𝑖
+𝑑
+2
+<
+𝑥
+mid 
+2
+ <x, move left to mid + 1 (search in the higher range).
+If 
+𝑚
+𝑖
+𝑑
+2
+>
+𝑥
+mid 
+2
+ >x, move right to mid - 1 (search in the lower range).
+The loop stops when left > right, and right stores the floor value of sqrt(x).
+4️⃣ Complexity Analysis
+Time Complexity:
+𝑂(log⁡𝑥)
+O(logx) → Since we halve the search space in each step.
+Space Complexity:
+𝑂
+(
+1
+)
+O(1) → No extra space used.
+6️⃣ Final Thoughts
+✔ Why Binary Search? → Fastest method (logarithmic complexity).
+✔ Why return right? → At the end, right will hold the largest r such that 
+𝑟
+2
+≤
+𝑥
+r 
+2
+ ≤x.
+✔ Handles large inputs efficiently → Prevents overflow by using mid = x / mid instead of mid * mid.
+
+ class Solution {
+public:
+    int mySqrt(int x) {
+        // return sqrt(x);
+        if(x==0) return 0;
+        int left=1,right=x;
+        while(left<=right)
+        {
+            int mid=left+(right-left)/2;
+            
+                if(mid==x/mid)
+                {
+                    return mid;
+                }
+                else if(mid<x/mid)
+                {
+                    left=mid+1;
+                }
+                else
+                {
+                    right=mid-1;
+                }
+            
+        }
+        return right;
+    }
+};
