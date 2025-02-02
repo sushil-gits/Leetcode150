@@ -1,0 +1,48 @@
+Approach for searchInsert Function
+The function implements Binary Search to find the target element or its correct insertion position in a sorted array.
+
+Steps:
+Initialize Pointers:
+
+start = 0 (beginning of the array)
+end = nums.size() - 1 (last index of the array)
+index (stores the insertion position)
+Binary Search Loop:
+
+While start <= end, continue searching:
+Compute mid = (start + end) / 2 (middle index).
+If nums[mid] == target, return mid (target found).
+If nums[mid] < target, move start to mid + 1 (search in the right half) and set index = mid + 1 (possible insertion position).
+Otherwise, move end to mid - 1 (search in the left half) and set index = mid (possible insertion position).
+Return Insertion Position:
+
+If the loop ends without finding target, return index, which holds the correct position where target should be inserted.
+Time Complexity:
+O(log N): Binary search reduces the problem size by half in each step.
+Space Complexity:
+O(1): No extra space is used apart from a few integer variables.
+
+
+
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        int mid,start=0,end=nums.size()-1,index;
+        while(start<=end){
+            mid=(start+end)/2;
+            if(nums[mid]==target){
+                return mid;
+            }
+            else if(nums[mid]<target){
+                start=mid+1;
+                index=mid+1;
+            }
+            else
+            {
+                end=mid-1;
+                index=mid;
+            }
+        }
+        return index;
+    }
+};
