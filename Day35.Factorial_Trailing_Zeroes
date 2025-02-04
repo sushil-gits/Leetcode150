@@ -1,0 +1,21 @@
+
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        // counting number of 2's
+        int count2=0;
+        for (int i = 2; n / i > 0; i *= 2) {
+        count2 += n / i;
+        }
+        // counting number of 5's
+        int count5=0;
+        for (int i = 5; n / i > 0; i *= 5) {
+        count5+= n / i;
+        }
+        // returning traling zeroes
+        int zeroes=min(count2,count5);
+        return zeroes;
+
+        
+    }
+};
