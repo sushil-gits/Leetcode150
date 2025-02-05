@@ -1,0 +1,52 @@
+Approach Explanation:
+Edge Case Handling:
+
+If there are 2 or fewer points, they always lie on the same line. Return n (number of points).
+Brute Force with Pairwise Selection:
+
+Iterate through all pairs of points and consider them as a possible line.
+Initialize maxi = 2 since a line with two points is the minimum valid case.
+Check Collinearity Using the Cross Product Formula:
+
+For every pair of points (i, j), check how many other points (k) satisfy the equation of a straight line.
+Instead of explicitly forming the line equation, we use cross multiplication to avoid precision errors in floating-point division:
+This ensures (x3, y3) lies on the same line as (x1, y1) and (x2, y2).
+Count the number of such points and update maxi.
+Time Complexity Analysis:
+
+We use three nested loops:
+Outer loop: Iterates through n points → O(n)
+Second loop: Picks another point for a line → O(n)
+Third loop: Checks collinearity for remaining points → O(n)
+Overall time complexity: O(n³) (not optimal but works for small n).
+
+
+
+class Solution {
+public:
+    int maxPoints(vector<vector<int>>& points) {
+        // if only two points 
+        int n=points.size();
+        if(n<=2)
+        return n;
+        // if points greater than 2 then initialize max with 2
+        int maxi=2;
+        for(int i=0;i<n;i++)
+        {
+            for(int j=i+1;j<n;j++)
+            {
+                int total=2;
+                for(int k=0;k<n;k++)
+                {
+                    if(k!=i&&k!=j)
+                    {
+                        if((points[j][1]-points[i][1])*(points[i][0]-points[k][0])==(points[i][1]-points[k][1])*(points[j][0]-points[i][0]))
+                        total++;
+                    }
+                }
+                maxi=max(maxi,total);
+            }
+        }
+        return maxi;
+    }
+};
