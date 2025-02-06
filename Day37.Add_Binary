@@ -1,0 +1,37 @@
+Step 1: Initialize Variables
+res: An empty string to store the result.
+carry: A variable initialized to 0, which will store the carry from the previous sum.
+i and j: Pointers initialized to the last indices of strings a and b respectively, to process from right to left.
+Step 2: Iterate Through Both Strings
+The loop continues while either i or j is non-negative (meaning there are still digits left to process) or there is a carry left.
+For each iteration:
+If i >= 0, add a[i] - '0' to carry (convert the character to integer and add to carry).
+If j >= 0, add b[j] - '0' to carry.
+Append (carry % 2 + '0') to res (converts sum mod 2 to a character and adds to the result).
+Update carry = carry / 2 (integer division to compute carry for the next step).
+Decrement i and j to move left.
+Step 3: Reverse the Result
+Since we are appending digits in reverse order (from LSB to MSB), we reverse the res string before returning.
+
+
+
+class Solution {
+public:
+    string addBinary(string a, string b) {
+       string ans="";
+       int i=a.size()-1;
+       int j=b.size()-1;
+       int carry=0;
+       while(i>=0||j>=0||carry) 
+       {
+        if(i>=0)
+        carry+=a[i--]-'0';
+        if(j>=0)
+        carry+=b[j--]-'0';
+        ans+=carry%2+'0';
+        carry/=2;
+       }
+       reverse(ans.begin(),ans.end());
+       return ans;
+    }
+};
