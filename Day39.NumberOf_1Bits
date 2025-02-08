@@ -1,0 +1,54 @@
+Approach for Counting Set Bits (Hamming Weight)
+Understanding the Problem
+The goal is to count the number of 1s (set bits) in the binary representation of a given integer n. This is also known as the Hamming weight of the number.
+
+Approach
+Using bitset<32> to Convert Integer to Binary
+
+bitset<32> b(n); converts n into a 32-bit binary representation.
+The bitset class in C++ allows easy access to each bit of the integer.
+Iterate Over All 32 Bits
+
+b.size() returns 32, as we are working with a 32-bit integer.
+Traverse each bit using a loop.
+If b[i] == 1, increment the count.
+Return the Count of Set Bits
+
+The final answer is stored in ans, which keeps track of the number of 1s encountered.
+Time Complexity Analysis
+Bitset Creation: 
+𝑂
+(
+1
+)
+O(1), since bitset<32> is constant in size.
+Loop Iteration: 
+𝑂
+(
+32
+)
+=
+𝑂
+(
+1
+)
+O(32)=O(1), since the maximum number of bits is fixed.
+Total Complexity: 
+𝑂
+(
+1
+)
+O(1), as the number of iterations is constant (32-bit representation).
+
+
+class Solution {
+public:
+    int hammingWeight(int n) {
+         bitset<32> b(n); 
+       int ans=0;
+       for(size_t i=0;i<b.size();i++){
+        if(b[i]==1) ans++;
+       }
+       return ans;
+    }
+};
