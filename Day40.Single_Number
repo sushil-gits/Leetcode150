@@ -1,0 +1,103 @@
+Approach for Solving "Single Number" Problem
+The problem requires finding the element that appears only once in an array where every other element appears twice. Let's go through the approaches used in the given solution:
+
+1. Brute Force Approach
+Time Complexity: 
+𝑂
+(
+𝑛
+2
+)
+O(n 
+2
+ )
+Space Complexity: 
+𝑂
+(
+1
+)
+O(1)
+Steps:
+Iterate through each element in the array.
+Count the occurrences of that element by iterating again through the array.
+If an element appears exactly once, return it.
+If no such element is found, return -1.
+🔴 Drawback:
+
+This approach is inefficient because for every element, it checks all other elements, leading to a time complexity of 
+𝑂
+(
+𝑛
+2
+)
+O(n 
+2
+ ).
+2. Optimized Approach Using XOR
+Time Complexity: 
+𝑂
+(
+𝑛
+)
+O(n)
+Space Complexity: 
+𝑂
+(
+1
+)
+O(1)
+Steps:
+Initialize a variable xorr = 0.
+Traverse the array and XOR each element with xorr.
+Since 
+𝑎
+⊕
+𝑎
+=
+0
+a⊕a=0 for any number 
+𝑎
+a and 
+𝑎
+⊕
+0
+=
+𝑎
+a⊕0=a, all duplicate elements cancel out, leaving only the unique number.
+Return xorr after the loop.
+✅ Why This Works Efficiently?
+
+XOR cancels out numbers that appear twice.
+Since XOR is a bitwise operation, it is highly optimized and runs in linear time.
+
+
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+    // //    brutt force approach
+    //     for(int i=0;i<nums.size();i++)
+    //     {
+    //         int num=nums[i];
+    //         int count=0;
+    //         for(int j=0;j<nums.size();j++)
+    //         {
+    //             if(nums[j]==num)
+    //             count++;
+    //         }
+    //         if(count==1)
+    //         return num;
+    //     }
+    //     return -1;
+    
+
+    // using +optimal appproach
+    int xorr=0;
+    for(int i=0;i<nums.size();i++)
+    {
+        xorr=xorr^nums[i];
+    }
+    return xorr;
+
+    }
+};
