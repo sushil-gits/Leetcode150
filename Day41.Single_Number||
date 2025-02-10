@@ -1,0 +1,23 @@
+#Approach--------------------------
+This approach uses bitwise operations to find the element that appears only once in an array where every other element appears exactly three times.
+
+Explanation:
+one keeps track of bits that appear exactly once.
+two keeps track of bits that appear exactly twice.
+For each num in nums:
+one = (one ^ num) & ~two; → Adds num to one if it's not in two, otherwise removes it.
+two = (two ^ num) & ~one; → Adds num to two if it's not in one, otherwise removes it.
+At the end, one contains the single occurring element.
+This solution runs in O(n) time and uses O(1) extra space.
+----------------------------------------------------------------------------------------------
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+     int one=0,two=0;
+     for(int num:nums){
+        one=(one^num)&~two;
+        two=(two^num)&~one;
+     }   
+     return one;
+    }
+};
