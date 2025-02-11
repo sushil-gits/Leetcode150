@@ -1,0 +1,66 @@
+Approach for rangeBitwiseAnd(left, right) using Bitwise Shifting
+The problem requires us to compute the bitwise AND of all numbers in the range [left, right]. Instead of iterating through each number, we use bitwise shifting to optimize the solution.
+
+Step-by-Step Approach
+1. Understanding Bitwise AND in a Range
+The bitwise AND of all numbers from left to right will be dominated by the common prefix of their binary representations.
+As numbers increase in the range, the least significant bits flip between 0 and 1, which causes the AND result to become 0 for those bits.
+2. Identifying the Common Prefix using Right Shift
+We repeatedly right shift (>>) both left and right until they become equal.
+Each right shift eliminates the least significant bit (LSB), reducing the range between left and right.
+The number of shifts (count) tells us how many bits were eliminated.
+3. Restoring the Common Prefix using Left Shift
+Once left equals right, we left shift (<<) it back by count positions to restore the original magnitude.
+Algorithm
+Initialize count = 0 to track the number of shifts.
+While left is not equal to right:
+Right shift (>>= 1) both left and right to remove the differing bits.
+Increment count to track the number of shifts.
+Once left == right, left shift (<<= count) to restore the common prefix.
+Dry Run Example
+Example 1
+📌 Input: left = 5, right = 7
+📌 Binary Representation:
+5  -> 101
+6  -> 110
+7  -> 111
+📌 Bitwise AND in range [5,7]:
+101 &
+110 &
+111
+------
+100  (4 in decimal)
+Execution
+Step	left (binary)	right (binary)	count
+Initial	101 (5)	111 (7)	0
+Right shift	10 (2)	11 (3)	1
+Right shift	1 (1)	1 (1)	2
+Left shift	100 (4)	4	
+📌 Output: 4
+
+Time Complexity
+The while loop shifts the numbers log(right) times, so the time complexity is O(log N), where N is the value of right.
+This is much more efficient than iterating over the entire range.
+Space Complexity
+O(1) since we use only a few integer variables.
+Key Takeaways
+✔ The bitwise AND of a range is determined by the common prefix in binary.
+✔ Right shifting (>>) removes differing bits until the numbers become equal.
+✔ Left shifting (<<) restores the magnitude after finding the common prefix.
+✔ Time Complexity: O(log N), Space Complexity: O(1).
+
+
+
+class Solution {
+public:
+    int rangeBitwiseAnd(int left, int right) {
+    //  using shifting operation
+    int count=0;
+    while(left!=right){
+        left>>=1;
+        right>>=1;
+        count++;
+    }   
+    return (left<<count);
+    }
+};
