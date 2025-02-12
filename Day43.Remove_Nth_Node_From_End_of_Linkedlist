@@ -1,0 +1,113 @@
+Approach: Remove N-th Node from End of List
+Problem Understanding
+We need to remove the N-th node from the end of a singly linked list and return the modified list.
+
+Approach
+1. Count the Total Number of Nodes
+First, traverse the entire linked list to count the total number of nodes (count).
+This helps us determine the position of the node to be deleted from the beginning.
+2. Compute Position from the Start
+Since we need to remove the N-th node from the end, we calculate:
+position
+=
+total nodes
+−
+𝑛
+position=total nodes−n
+If position == 0, it means we need to delete the head node. In this case:
+Move head to the next node.
+Delete the original head.
+Return the new head.
+3. Traverse Again to Find the Target Node
+Start from head and traverse position - 1 times to find the previous node (prev).
+The node to be deleted is prev->next.
+4. Delete the Node
+Update prev->next to skip the target node (curr).
+Delete curr to free memory.
+5. Return the Updated List
+The modified linked list is returned.
+
+###########Code Walkthrough
+Step 1: Count the Nodes
+int count = 0;
+ListNode *temp = head;
+while (temp) {
+    count++;
+    temp = temp->next;
+}
+We traverse the list and count the total number of nodes.
+Step 2: Compute Position from the Start
+count -= n;
+if (count == 0) {
+    temp = head;
+    head = head->next;
+    delete temp;
+    return head;
+}
+If count == 0, we are deleting the first node.
+Move head to the next node and delete the old head.
+Step 3: Find the Target Node
+ListNode *curr = head, *prev = NULL;
+while (count--) {
+    prev = curr;
+    curr = curr->next;
+}
+We traverse the list until curr reaches the node to be deleted.
+prev stores the previous node.
+Step 4: Remove the Node
+prev->next = curr->next;
+delete curr;
+prev->next skips curr, effectively removing it from the list.
+delete curr frees memory to prevent memory leaks.
+Step 5: Return Updated List
+return head;
+The modified list is returned.
+#########################################################################
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        // ListNode* start = head;
+        // ListNode* end = head;
+        // ListNode* temp = NULL;
+        // for(int i=1;i<n;i++)
+        //     start=start->next;
+        // while(start->next){
+        //     start=start->next;
+        //     end=end->next;
+        //     if(temp==NULL)
+        //         temp=head;
+        //     else
+        //         temp=temp->next;
+        // }
+        // if(temp==NULL)
+        //     head=head->next;
+        // else
+        //     temp->next = end->next;
+        // return head;
+        int count=0;
+        ListNode *temp=head;
+        while(temp){
+            count++;
+            temp=temp->next;
+
+        }
+        count-=n;
+        if(count==0){
+            temp=head;
+            head=head->next;
+            delete temp;
+            return head;
+
+        }
+        ListNode *curr=head,*prev=NULL;
+        while(count--){
+            prev=curr;
+            curr=curr->next;
+        }
+        prev->next=curr->next;
+            delete curr;
+        
+        return head;
+
+    }
+};
