@@ -1,0 +1,72 @@
+-------------------Stepwise Approach for Detecting Cycle in a Linked List (Floyd’s Cycle Detection Algorithm)
+The given code checks if a linked list contains a cycle using the Floyd’s Cycle Detection Algorithm (Tortoise and Hare Algorithm). Here’s a step-by-step breakdown of how it works:
+
+Step 1: Base Condition (Check for Edge Cases)
+if (!head || !head->next) return false;
+If the linked list is empty (head == NULL) or contains only one node (head->next == NULL), there is no cycle, so return false.
+Step 2: Initialize Two Pointers (Slow and Fast)
+ListNode *slow = head, *fast = head->next;
+Slow Pointer (slow) → Moves one step at a time.
+Fast Pointer (fast) → Moves two steps at a time.
+Initially, slow starts from the head, and fast starts from head->next.
+Step 3: Traverse the List Using Two Pointers
+while (fast != slow) {
+The loop runs until fast meets slow, indicating a cycle exists.
+Step 3.1: Check if Fast Pointer Reaches End (No Cycle)
+if (!fast->next || !fast->next->next) return false;
+If fast->next == NULL or fast->next->next == NULL, it means the list has reached the end and no cycle exists, so return false.
+Step 3.2: Move Pointers
+slow = slow->next;
+fast = fast->next->next;
+Move slow pointer one step forward (slow = slow->next).
+Move fast pointer two steps forward (fast = fast->next->next).
+Step 4: Detect Cycle (Fast Meets Slow)
+return true;
+If at any point, slow == fast, a cycle is detected, so return true.
+Time and Space Complexity Analysis
+Operation	Complexity
+Traversing Linked List	O(N) (Each node is visited at most once)
+Space Complexity	O(1) (No extra space is used)
+This algorithm efficiently detects cycles in O(N) time with O(1) space.
+
+Example Walkthrough
+Example 1: Linked List with Cycle
+Input Linked List
+markdown
+1 → 2 → 3 → 4 → 5
+          ↑     ↓
+          7 ←  6
+slow moves one step: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 3 → ...
+fast moves two steps: 1 → 3 → 5 → 7 → 4 → 6 → 3 → ...
+Eventually, slow == fast at node 3, so cycle detected → return true.
+Example 2: No Cycle
+Input Linked List
+1 → 2 → 3 → 4 → 5 → NULL
+fast reaches NULL, so no cycle exists → return false.
+Summary
+✅ Uses Floyd’s Cycle Detection (Tortoise and Hare Algorithm)
+✅ Time Complexity: O(N)
+✅ Space Complexity: O(1)
+✅ Efficient for cycle detection without extra space
+
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        if(!head || !head->next)
+        return false;
+        ListNode *slow=head,*fast=head->next;
+        while(fast!=slow)
+        {
+            if(!fast->next || !fast->next->next)
+            return false;
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        return true;
+    }
+};
+
+
+
+
+
