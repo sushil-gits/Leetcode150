@@ -1,0 +1,96 @@
+Stepwise Approach for Valid Parentheses Problem
+This code checks whether a given string of parentheses is balanced or valid (i.e., all opening brackets have corresponding closing brackets in the correct order).
+
+Step 1: Initialize a Stack
+Create an empty stack st to store opening brackets ((, {, [).
+A stack follows LIFO (Last In, First Out), which helps in matching the latest opening bracket with its correct closing bracket.
+Step 2: Traverse the String Character by Character
+Use a for loop to iterate through each character in the string s.
+Step 2.1: If the Current Character is an Opening Bracket
+If s[i] is (, {, or [, push it onto the stack.
+Step 2.2: If the Current Character is a Closing Bracket
+First, check if the stack is empty:
+If st.empty() == true, return false immediately (invalid case, as there's no matching opening bracket).
+Check the top of the stack (st.top()):
+If the closing bracket matches the correct opening bracket at the top of the stack:
+Pop the top element from the stack.
+Otherwise, return false (mismatched brackets).
+Step 3: Final Check After Traversal
+If the stack is empty at the end, return true (valid parentheses).
+If any opening bracket is left in the stack, return false (unmatched opening bracket).
+Time & Space Complexity
+Time Complexity: 
+𝑂
+(
+𝑁
+)
+O(N), where 
+𝑁
+N is the length of the string (each character is processed once).
+Space Complexity: 
+𝑂
+(
+𝑁
+)
+O(N), as the worst case can have all opening brackets stored in the stack.
+Example Walkthrough
+Example 1
+Input: s = "{[()]}"
+Stepwise Execution:
+
+{ → push to stack (st = {).
+[ → push to stack (st = {[).
+( → push to stack (st = {[().
+) → matches (, pop from stack (st = {[).
+] → matches [, pop from stack (st = {).
+} → matches {, pop from stack (st = []).
+Final Stack: [] (Empty ✅)
+Output: true (Valid ✅)
+
+Example 2
+Input: s = "{[(])}"
+Stepwise Execution:
+
+{ → push to stack (st = {).
+[ → push to stack (st = {[).
+( → push to stack (st = {[().
+] → Mismatch with (, return false.
+Output: false (Invalid ❌)
+
+
+
+class Solution {
+public:
+    bool isValid(string s) {
+       stack<char>st;
+       for(int i=0;i<s.size();i++){
+        if(s[i]=='('||s[i]=='{'||s[i]=='[')
+        st.push(s[i]);
+        else{
+            if(st.empty())
+            return 0;
+            else if(s[i]==')'){
+                if(st.top()!='(')
+                return 0;
+                else 
+                st.pop();
+            }
+            else if(s[i]=='}'){
+                if(st.top()!='{')
+                return 0;
+                else
+                st.pop();
+            }
+            else
+            {
+                if(st.top()!='[')
+                return 0;
+                else
+                st.pop();
+            }
+        }
+       
+       }
+        return st.empty();
+    }
+};
