@@ -1,0 +1,61 @@
+Stepwise Approach for Finding the Peak Element
+This approach uses Binary Search to efficiently find a peak element in the array.
+
+Step 1: Understand the Problem Statement
+A peak element is an element that is greater than its adjacent elements.
+Given an array nums, we need to return the index of any one peak element.
+The array does not necessarily have to be sorted.
+Step 2: Handle Base Cases
+If the array has only one element → return 0 (the only index).
+If the first element is greater than the second → return 0 (it is a peak).
+If the last element is greater than the second last → return n-1 (it is a peak).
+Step 3: Initialize Variables for Binary Search
+Set i = 1 (second element) and j = n-2 (second last element).
+We avoid the first and last elements since they are already checked in base cases.
+Step 4: Perform Binary Search
+Find the middle element: mid = i + (j - i) / 2
+Check if mid is a peak:
+If nums[mid] > nums[mid - 1] && nums[mid] > nums[mid + 1] → return mid (found a peak).
+Decide the search direction:
+If nums[mid] > nums[mid - 1], move i = mid + 1 (search right side).
+Else, move j = mid - 1 (search left side).
+Step 5: Return the Answer
+If a peak element is found in the loop, return its index.
+If no peak is found (though theoretically impossible for a valid input), return -1.
+Time Complexity Analysis
+Binary search is used, reducing the search space by half in each step.
+Time Complexity = O(log n)
+Space Complexity = O(1) (no extra space used).
+
+
+
+
+
+
+class Solution {
+public:
+    int findPeakElement(vector<int>& nums) {
+        int n=nums.size();
+        // base case
+        if(n==1)
+        return 0;
+        if(nums[0]>nums[1])
+        return 0;
+        if(nums[n-1]>nums[n-2])
+        return n-1;
+        int ans=-1;
+        int i=1;
+        int j=n-2;
+        while(i<=j)
+        {
+            int mid=i+(j-i)/2;
+            if(nums[mid]>nums[mid-1]&&nums[mid]>nums[mid+1])
+            return mid;
+            else if(nums[mid]>nums[mid-1])
+            i=mid+1;
+            else
+            j=mid-1;
+        }
+        return -1;
+    }
+};
