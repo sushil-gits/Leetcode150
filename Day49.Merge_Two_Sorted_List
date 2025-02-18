@@ -1,0 +1,155 @@
+Stepwise Solution: Merge Two Sorted Lists Using Recursion
+The problem requires merging two sorted linked lists into a single sorted list.
+
+Step 1: Understand the Recursive Approach
+We use recursion to merge two linked lists:
+
+Compare the values of the nodes in list1 and list2.
+Add the smaller value to the new list.
+Move the pointer forward in the list containing the smaller value.
+Continue merging until both lists are completely processed.
+Step 2: Base Cases
+The recursive function f(nhead, h1, h2) handles the merging:
+
+If both lists are empty (h1 == NULL and h2 == NULL) → Return.
+If one list is empty (h1 == NULL) → Append the remaining nodes of h2 to nhead.
+If the other list is empty (h2 == NULL) → Append the remaining nodes of h1 to nhead.
+Step 3: Recursively Merge the Lists
+If h1->val < h2->val, add h1->val to the new list and move h1 forward.
+Else, add h2->val to the new list and move h2 forward.
+Recursively call f(nhead, h1, h2) to continue merging.
+Step 4: Merge and Return the New List
+Create a dummy node nhead as the start of the new list.
+Call the recursive function f(nhead, list1, list2).
+Return nhead->next, as nhead is a placeholder.
+Code Implementation
+cpp
+Copy
+Edit
+#include <bits/stdc++.h>
+using namespace std;
+
+// Definition for singly-linked list.
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+};
+
+class Solution {
+public:
+    void f(ListNode* nhead, ListNode* h1, ListNode* h2) {
+        if (!h1 && !h2) return; // Base case: both lists are empty
+
+        if (!h1) { // If list1 is empty, append remaining nodes of list2
+            nhead->next = new ListNode(h2->val);
+            f(nhead->next, h1, h2->next);
+        }
+        else if (!h2) { // If list2 is empty, append remaining nodes of list1
+            nhead->next = new ListNode(h1->val);
+            f(nhead->next, h1->next, h2);
+        }
+        else {
+            if (h1->val < h2->val) { // Choose smaller value and move pointer
+                nhead->next = new ListNode(h1->val);
+                f(nhead->next, h1->next, h2);
+            } else {
+                nhead->next = new ListNode(h2->val);
+                f(nhead->next, h1, h2->next);
+            }
+        }
+    }
+
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        ListNode* nhead = new ListNode(); // Dummy head
+        ListNode* t = nhead;
+        f(nhead, list1, list2); // Call recursive function
+        return t->next; // Return merged list (skipping dummy node)
+    }
+};
+
+// Function to print linked list
+void printList(ListNode* head) {
+    while (head) {
+        cout << head->val << " -> ";
+        head = head->next;
+    }
+    cout << "NULL\n";
+}
+
+// Example usage
+int main() {
+    // Create first sorted linked list: 1 -> 3 -> 5
+    ListNode* list1 = new ListNode(1, new ListNode(3, new ListNode(5)));
+
+    // Create second sorted linked list: 2 -> 4 -> 6
+    ListNode* list2 = new ListNode(2, new ListNode(4, new ListNode(6)));
+
+    Solution sol;
+    ListNode* mergedList = sol.mergeTwoLists(list1, list2);
+
+    // Print the merged linked list
+    printList(mergedList);
+
+    return 0;
+}
+Time Complexity Analysis
+Each node is processed exactly once, making recursive calls O(n + m), where n and m are the lengths of the two lists.
+Space Complexity Analysis
+Recursive function calls consume O(n + m) space due to stack memory.
+If using an iterative approach, space complexity would be O(1).
+Key Takeaways
+✅ Uses recursion for a clean, structured approach.
+✅ Maintains sorted order efficiently.
+✅ Time Complexity: O(n + m), Space Complexity: O(n + m) (due to recursion).
+✅ Can be optimized to O(1) space using an iterative approach.
+
+
+
+class Solution {
+public:
+void f(ListNode*nhead,ListNode*h1,ListNode*h2)
+{
+    if(!h1&&!h2)return;
+    if(!h1&&h2)
+    {
+        ListNode*t=new ListNode(h2->val);
+        nhead->next=t;
+        nhead=nhead->next;
+        f(nhead,h1,h2->next);
+    }
+   else if(h1&&!h2)
+    {
+        ListNode*t=new ListNode(h1->val);
+        nhead->next=t;
+        nhead=nhead->next;
+        f(nhead,h1->next,h2);
+    }
+    else
+    {
+        if(h1->val<h2->val)
+        {
+         ListNode*t=new ListNode(h1->val);
+        nhead->next=t;
+        nhead=nhead->next;
+        f(nhead,h1->next,h2);
+        }
+        else 
+        {
+        ListNode*t=new ListNode(h2->val);
+        nhead->next=t;
+        nhead=nhead->next;
+        f(nhead,h1,h2->next);
+        }
+       
+    }
+}
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+       ListNode* nhead=new ListNode();
+       ListNode*t= nhead;
+       f(nhead,list1,list2);
+        return t->next;
+    }
+};
