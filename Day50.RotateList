@@ -1,0 +1,91 @@
+🚀 Stepwise Approach: Rotate Right in Linked List
+Problem Statement:
+You are given a singly linked list and an integer k.
+Rotate the list to the right by k places.
+Step 1: Base cases
+if(head==NULL || head->next==NULL)
+    return head;
+If the list is empty (head == NULL) or contains only one node (head->next == NULL), rotating it doesn’t change anything.
+Return the head as-is.
+Step 2: Count the number of nodes
+int count=0;
+ListNode *temp=head;
+while(temp){
+    count++;
+    temp=temp->next;
+}
+Initialize count = 0.
+Use a pointer temp to traverse the linked list.
+Count the total number of nodes in the list.
+Step 3: Optimize k using modulo operation
+k = k % count;
+if(k == 0)
+    return head;
+Since rotating a list by its length results in the same list, we take the modulo of k by the length of the list (count).
+If k becomes 0 after the modulo operation, return the head as no rotation is needed.
+Step 4: Find the new head and break the link
+count -= k;
+ListNode *curr = head, *prev = NULL;
+while(count--){
+    prev = curr;
+    curr = curr->next;
+}
+prev->next = NULL;
+Calculate how many steps to move from the head to get the new head after rotation:
+count -= k gives the position where the new head should be.
+Traverse the list again using curr and prev.
+When we reach the new head, break the link by setting prev->next = NULL.
+Step 5: Connect the old tail to the old head
+ListNode *tail = curr;
+while(tail->next != NULL){
+    tail = tail->next;
+}
+tail->next = head;
+Use a pointer tail to reach the end of the list.
+Connect the last node (tail) to the old head to form a rotated list.
+Step 6: Update head and return
+head = curr;
+return head;
+Update the head to the new starting point (curr).
+Return the new head.
+Time Complexity:
+O(n) where n is the number of nodes in the linked list:
+Counting nodes: O(n)
+Finding the new head: O(n - k)
+Connecting the tail: O(n - k)
+Total: O(n)
+Space Complexity:
+O(1) — No extra space used, only pointers.
+
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if(head==NULL || head->next==NULL)
+        return head;
+        // count number of nodes
+        int count=0;
+        ListNode *temp=head;
+        while(temp){
+            count++;
+            temp=temp->next;
+        }
+        k=k%count;
+        if(k==0)
+        return head;
+        count-=k;
+        ListNode *curr=head,*prev=NULL;
+        while(count--){
+          prev=curr;
+          curr=curr->next;
+        }
+        prev->next=NULL;
+        ListNode *tail=curr;
+        while(tail->next!=NULL){
+            tail=tail->next;
+
+        }
+        tail->next=head;
+        head=curr;
+        return head;
+    }
+};
