@@ -1,0 +1,85 @@
+Stepwise Approach for bool searchMatrix(vector<vector<int>>& matrix, int target)
+This function searches for a target value in a row-wise and column-wise sorted 2D matrix. The approach follows Binary Search on a 1D mapped version of the matrix.
+
+Step 1: Understand the Matrix Structure
+The matrix is given in a sorted order:
+Each row is sorted from left to right.
+The first element of each row is greater than the last element of the previous row.
+This structure allows us to apply Binary Search on the entire matrix by treating it as a flattened 1D array.
+Step 2: Define Row and Column Variables
+row = matrix.size(); → Get the number of rows.
+col = matrix[0].size(); → Get the number of columns.
+The total number of elements in the matrix = row * col.
+Step 3: Apply Binary Search on the Matrix
+Instead of treating the matrix as a 2D array, we map the indices to a virtual 1D array:
+Start (s) = 0 (First element)
+End (e) = (row * col) - 1 (Last element)
+How to Access Matrix Elements Using 1D Indexing?
+Given an index mid, we calculate its row and column in the matrix:
+Row Index: mid / col
+Column Index: mid % col
+This allows us to access matrix[mid / col][mid % col] as if it were a 1D array.
+Step 4: Perform Binary Search
+Compute mid index: mid = s + (e - s) / 2 (to prevent overflow).
+Retrieve midValue from the matrix: midValue = matrix[mid / col][mid % col].
+Compare midValue with target:
+If midValue == target, return true (element found).
+If midValue < target, search in the right half (s = mid + 1).
+If midValue > target, search in the left half (e = mid - 1).
+Step 5: Return the Result
+If the loop completes without finding the target, return false (element not present in the matrix).
+Time Complexity Analysis
+Binary Search runs in 
+𝑂
+(
+log
+⁡
+(
+𝑟
+𝑜
+𝑤
+×
+𝑐
+𝑜
+𝑙
+)
+)
+O(log(row×col)) time.
+Since we are treating the matrix as a flattened sorted 1D array, the search takes logarithmic time.
+Example Walkthrough
+Input:
+matrix = {{1, 3, 5}, 
+          {7, 9, 11}, 
+          {13, 15, 17}};
+target = 9;
+Steps:
+s	e	mid	midValue	Action
+0	8	4	matrix[4/3][4%3] = matrix[1][1] = 9	Found target, return true
+Output: true ✅
+Edge Cases Handled
+✔ Empty matrix → If matrix is empty or matrix[0] is empty, return false.
+✔ Single row matrix → Works seamlessly as it’s a continuous 1D search.
+✔ Target not present → Returns false correctly.
+✔ Target at first/last element → Efficiently finds it in O(log n) time.
+
+Final Thought
+This Binary Search approach is optimal for a sorted 2D matrix, reducing the time complexity from 
+𝑂
+(
+𝑛
+2
+)
+O(n 
+2
+ ) to 
+𝑂
+(
+log
+⁡
+(
+𝑛
+×
+𝑚
+)
+)
+O(log(n×m)). 🚀
