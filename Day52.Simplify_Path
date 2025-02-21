@@ -1,0 +1,128 @@
+Stepwise Approach for simplifyPath Function
+The function simplifyPath(string path) simplifies a given absolute file path by resolving:
+
+. (current directory)
+.. (move one level up)
+Extra or consecutive / (multiple slashes should be treated as one)
+Step 1: Initialize a Stack and Result String
+Stack (s): Used to store valid directory names.
+String (res): Used to store the final simplified path.
+stack<string> s;
+string res;
+Step 2: Traverse the Given Path Character by Character
+Iterate over the path string to process each component (directory, . or ..).
+Skip any / to avoid redundant processing.
+for(int i = 0; i < path.size(); i++) {
+    if(path[i] == '/')
+        continue;
+Step 3: Extract Directory or File Name
+Use a temporary string temp to store the current file or directory name.
+Continue reading characters until the next / is encountered.
+string temp;
+while(i < path.size() && path[i] != '/') {
+    temp += path[i];
+    ++i;
+}
+Step 4: Handle Different Cases
+✅ Case 1: . (Current Directory)
+If temp == ".", it means stay in the current directory.
+Skip it and continue processing the path.
+if(temp == ".")
+    continue;
+✅ Case 2: .. (Move One Directory Up)
+If temp == "..":
+Check if the stack is not empty.
+Pop the top directory, moving one level up.t
+else if(temp == "..") {
+    if(!s.empty())
+        s.pop();
+}
+✅ Case 3: Valid Directory Name
+If temp is a valid directory name (not "." or ".."), push it onto the stack.
+else
+    s.push(temp);
+Step 5: Construct the Simplified Path
+If the stack is empty, return "/" (root directory).
+Otherwise, build the result by appending each directory from the stack.
+while(!s.empty()) {
+    res = "/" + s.top() + res;
+    s.pop();
+}
+if(res.size() == 0)
+    return "/";
+return res;
+Example Walkthrough
+Example 1:
+🔹 Input: "/home/../usr//bin/./scripts/"
+🔹 Expected Output: "/usr/bin/scripts"
+
+Step	Character Processed	Stack Content	Action
+1	/	[]	Ignore /
+2	home	["home"]	Push "home"
+3	/	["home"]	Ignore /
+4	..	[]	Pop "home" (Move up)
+5	/	[]	Ignore /
+6	usr	["usr"]	Push "usr"
+7	/	["usr"]	Ignore /
+8	/	["usr"]	Ignore /
+9	bin	["usr", "bin"]	Push "bin"
+10	/	["usr", "bin"]	Ignore /
+11	.	["usr", "bin"]	Ignore "."
+12	/	["usr", "bin"]	Ignore /
+13	scripts	["usr", "bin", "scripts"]	Push "scripts"
+🔹 Final Stack: ["usr", "bin", "scripts"]
+🔹 Result Path: "/usr/bin/scripts"
+
+Time and Space Complexity
+Time Complexity: O(n) (Processing each character once)
+Space Complexity: O(n) (Using a stack for valid directory names)
+Final Thoughts
+This approach efficiently simplifies UNIX-like paths.
+Stack is ideal for handling .. (move up) operations.
+Ensures removal of redundant slashes (/) and ignoring . (current directory).
+
+
+
+class Solution {
+public:
+    string simplifyPath(string path) {
+    //   creating a stack
+    stack<string>s;
+    string res;
+    for(int i=0;i<path.size();i++)
+    {
+       if(path[i]=='/')
+       continue;
+       string temp;
+    //    iterate till we doesnot traverse the whole string
+    while(i<path.size()&&path[i]!='/')
+    {
+        // add path to temp string
+        temp+=path[i];
+        ++i;
+
+    }
+    if(temp==".")
+    continue;
+    // pop the top element from stack if exits
+    else  if(temp=="..")
+    {
+        if(!s.empty())
+        s.pop();
+    }
+    else
+    // push the directory file name to stack
+    s.push(temp);
+    }
+    // adding all the stack elements to result 
+    while(!s.empty())
+    {
+        res="/"+s.top()+res;
+        s.pop();
+    }
+    // if no directory or file is present
+    if(res.size()==0)
+    return "/";
+    return res;
+    }
+};
