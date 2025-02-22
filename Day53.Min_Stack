@@ -1,0 +1,127 @@
+Stepwise Approach for Implementing MinStack
+The MinStack class is designed to implement a stack that supports push, pop, retrieving the top element, and fetching the minimum element in constant time 
+𝑂
+(
+1
+)
+O(1). It uses a vector<pair<int, int>> to store values along with the minimum value at each state.
+
+Step 1: Define the Data Structure
+A vector of pairs, vector<pair<int,int>> s, is used as the underlying data structure.
+Each element in s stores:
+first: The actual value pushed onto the stack.
+second: The minimum value in the stack up to that point.
+Step 2: Constructor (MinStack)
+MinStack() { };
+Initializes an empty stack.
+Step 3: push(int val) - Push Element into Stack
+void push(int val) {
+    if(s.empty()) 
+        s.push_back({val, val});  // If stack is empty, value is both element and min.
+    else
+        s.push_back({val, min(s.back().second, val)}); // Store val & update min.
+}
+If the stack is empty:
+Push {val, val} since it's the only element, making it the minimum.
+Otherwise:
+Push {val, min(previous_min, val)} to ensure the second element stores the minimum seen so far.
+Step 4: pop() - Remove the Top Element
+void pop() {
+    s.pop_back();
+}
+Removes the last element (both the value and the corresponding min) from s.
+Step 5: top() - Get the Top Element
+int top() {
+    return s.back().first;
+}
+Returns the top element of the stack (first value in the top pair).
+Step 6: getMin() - Get Minimum Element
+int getMin() {
+    return s.back().second;
+}
+Returns the minimum value present in the stack, which is stored as the second element of the topmost pair.
+Time Complexity Analysis
+Operation	Time Complexity
+push()	
+𝑂
+(
+1
+)
+O(1)
+pop()	
+𝑂
+(
+1
+)
+O(1)
+top()	
+𝑂
+(
+1
+)
+O(1)
+getMin()	
+𝑂
+(
+1
+)
+O(1)
+Space Complexity
+𝑂
+(
+𝑛
+)
+O(n), where 
+𝑛
+n is the number of elements in the stack.
+Example Execution
+MinStack minStack;
+minStack.push(5);   // Stack: [(5,5)]
+minStack.push(3);   // Stack: [(5,5), (3,3)]
+minStack.push(7);   // Stack: [(5,5), (3,3), (7,3)]
+minStack.push(2);   // Stack: [(5,5), (3,3), (7,3), (2,2)]
+
+minStack.getMin();  // Returns 2
+minStack.pop();     // Stack: [(5,5), (3,3), (7,3)]
+minStack.getMin();  // Returns 3
+minStack.top();     // Returns 7
+This ensures that getMin() always operates in constant time 
+𝑂
+(
+1
+)
+O(1). 🚀
+
+class MinStack {
+public:
+vector<pair<int,int>>s;
+    MinStack()
+     { };
+    
+    void push(int val) {
+        if(s.empty())
+        s.push_back({val,val});
+        else
+        s.push_back({val,min(s.back().second,val)});
+    }
+    
+    void pop() {
+        s.pop_back();
+    }
+    
+    int top() {
+        return s.back().first;
+    }
+    
+    int getMin() {
+        return s.back().second;
+    }
+};
+
+
+
+
+
+
+
+
