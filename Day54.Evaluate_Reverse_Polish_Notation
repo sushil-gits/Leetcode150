@@ -1,0 +1,83 @@
+Stepwise Approach for Evaluating Reverse Polish Notation (RPN)
+Step 1: Understand the problem statement
+The function evalRPN(vector<string>& tokens) evaluates an arithmetic expression given in Reverse Polish Notation (RPN).
+Operands (numbers) are pushed onto a stack.
+Operators (+, -, *, /) pop two numbers from the stack, perform the operation, and push the result back.
+The final result is at the top of the stack.
+Step 2: Define a helper function resolves
+This function takes two integers (a and b) and an operator (Operator).
+It performs the arithmetic operation based on the operator.
+It returns the computed result.
+long resolves(int a, int b, char Operator){
+    if(Operator == '+') return a + b;
+    else if(Operator == '-') return a - b;
+    else if(Operator == '*') return (long)a * b;  // Ensures no overflow
+    return a / b;  // Handles division case
+}
+Step 3: Initialize a stack
+Create a stack<long> to store numbers.
+Iterate through the tokens list, processing each element.
+stack<long> Stack;
+int n = tokens.size();
+Step 4: Traverse the tokens array
+For each token:
+If it's an operator (+, -, *, /):
+Pop the top two numbers from the stack (integer2 and integer1).
+Call resolves(integer1, integer2, Operator) to compute the result.
+Push the result back onto the stack.
+Else, convert the token into a number and push it onto the stack.
+for(int i = 0; i < n; i++){
+    // If the token is an operator
+    if(tokens[i].size() == 1 and tokens[i][0] < 48){ 
+        long integer2 = Stack.top();
+        Stack.pop();
+        long integer1 = Stack.top();
+        Stack.pop();
+        string Operator = tokens[i];
+        long resolvedAns = resolves(integer1, integer2, Operator[0]);
+        Stack.push(resolvedAns);
+    } 
+    // If the token is a number
+    else {
+        Stack.push(stol(tokens[i])); // Convert string to long and push onto stack
+    }
+}
+Step 5: Return the final result
+The last remaining element in the stack is the final computed result.
+Return Stack.top().
+return Stack.top();
+Summary of Approach
+Use a stack to store operands.
+Iterate through the tokens array:
+If it's an operand (number), push it onto the stack.
+If it's an operator, pop two operands, apply the operation, and push the result back.
+Return the final result from the top of the stack.
+
+
+class Solution {
+public:
+
+    long resolves(int a, int b, char Operator){
+        if(Operator == '+') return a + b;
+        else if(Operator == '-') return a - b;
+        else if(Operator == '*') return (long)a*b;
+        return a/b;
+    }
+    int evalRPN(vector<string>& tokens) {
+     stack<long> Stack;
+        int n = tokens.size();
+        for(int i = 0; i < n; i++){
+            if(tokens[i].size() == 1 and tokens[i][0] < 48){
+                long integer2 = Stack.top();
+                Stack.pop();
+                long integer1 = Stack.top();
+                Stack.pop();
+                string Operator = tokens[i];
+                long resolvedAns = resolves(integer1, integer2 , Operator[0]);
+                Stack.push(resolvedAns);
+            }else 
+                Stack.push(stol(tokens[i]));
+        }
+        return Stack.top();
+    }
+};
