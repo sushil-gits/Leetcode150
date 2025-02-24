@@ -1,0 +1,125 @@
+**************************************************************stepwise Approach for calculate Function
+The function evaluates a given arithmetic expression (which may contain numbers, +, -, and parentheses). The approach uses a stack to manage signs and intermediate results.
+
+Step 1: Initialize Variables
+int sum = 0; → Stores the result of the expression.
+int sign = 1; → Keeps track of the current sign (+1 for positive, -1 for negative).
+stack<int> st; → A stack to store intermediate results when encountering parentheses.
+
+Step 2: Traverse the String Character by Character
+Loop through each character in the string:
+for (int i = 0; i < s.size(); i++) 
+
+Step 3: Process Numbers
+If s[i] is a digit:
+Extract the complete number while the characters remain digits.
+Convert it into an integer (val).
+Update sum by multiplying val with the current sign.
+Reset sign to 1 for the next operation.
+
+Example: For "12+3", when i = 0, val = 12. The loop ensures it reads both digits before moving to +.
+if (isdigit(ch)) {
+    int val = 0;
+    while (i < s.size() && isdigit(s[i])) {
+        val = val * 10 + (s[i] - '0');  // Convert string to number
+        i++;
+    }
+    i--; // Adjust index after the loop
+    sum += sign * val;  // Apply the sign
+    sign = 1; // Reset sign
+}
+
+Step 4: Process Parentheses
+Opening Parenthesis (:
+Push the current sum onto the stack.
+Push the sign onto the stack.
+Reset sum = 0 for the new expression inside the parentheses.
+Reset sign = 1 as default.
+else if (ch == '(') {
+    st.push(sum);   // Store previous result
+    st.push(sign);  // Store sign before parentheses
+    sum = 0;        // Reset for inner expression
+    sign = 1;       // Default positive sign
+}
+Closing Parenthesis ):
+Multiply sum with the stored sign from the stack.
+Add the stored previous sum to sum.
+else if (ch == ')') {
+    sum = st.top() * sum;  // Multiply with stored sign
+    st.pop();
+    sum += st.top();       // Add stored previous sum
+    st.pop();
+}
+
+Step 5: Process Signs (-)
+If - is encountered, toggle the sign (sign *= -1).
++ does not need special handling since sign is reset to 1 by default.
+else if (ch == '-') {
+    sign *= -1;
+}
+
+Step 6: Return the Final Result
+return sum;
+The final sum contains the evaluated expression.
+
+Example Walkthrough
+Input: "1 + (2 - (3 + 4))"
+1 + (...) → sum = 1
+Encounter ( → Push 1 and +
+2 - (...) → sum = 2
+Encounter ( → Push 2 and -
+3 + 4 → sum = 7
+Encounter ) → Multiply sum by -1 (from stack), result -7
+Add stored 2 → sum = -5
+Encounter ) → Multiply by +1 (from stack), result -4
+Add stored 1 → sum = -3
+Output: -3
+Time Complexity Analysis
+O(N): Each character is processed once.
+O(N) Space: Stack is used for parentheses handling.
+
+
+class Solution {
+public:
+    int calculate(string s) {
+     int sum=0;
+     int sign=1;
+     stack<int>st;
+     for(int i=0;i<s.size();i++)
+     {
+        char ch=s[i];
+        if(isdigit(ch))
+        {
+            int val=0;
+            while(i<s.size()&& isdigit(s[i]))
+            {
+                val=val*10+(s[i]-'0');
+                i++;
+            }
+            i--;
+            sum+=sign*val;
+            sign=1;
+        }
+        else if(ch=='(')
+        {
+            st.push(sum);
+            st.push(sign);
+            sum+=st.top();
+            sum=0;
+            sign=1;
+        }
+        else if(ch==')')
+        {
+            sum=st.top()*sum;
+            st.pop();
+            sum+=st.top();
+            st.pop();
+        }
+        else if(ch=='-')
+        {
+            sign*=-1;
+        }
+     }
+     return sum;
+    }
+};
