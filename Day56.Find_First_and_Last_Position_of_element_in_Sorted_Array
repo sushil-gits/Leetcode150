@@ -1,0 +1,181 @@
+Three Different Solutions for "Find First and Last Position of Element in Sorted Array"
+The goal is to find the first and last occurrence of a target element in a sorted array.
+
+1️⃣ Approach 1: Brute Force (Linear Search) - O(N)
+Steps
+Initialize starting = -1 and ending = -1 (to store first and last positions).
+Loop through the array from left to right:
+If nums[i] == target, set starting = i and break.
+Loop through the array from right to left:
+If nums[i] == target, set ending = i and break.
+Return {starting, ending}.
+Code
+#include <iostream>
+#include <vector>
+using namespace std;
+
+vector<int> searchRange(vector<int>& nums, int target) {
+    int starting = -1, ending = -1;
+    int n = nums.size();
+
+    // Find the first occurrence
+    for (int i = 0; i < n; i++) {
+        if (nums[i] == target) {
+            starting = i;
+            break;
+        }
+    }
+
+    // Find the last occurrence
+    for (int i = n - 1; i >= 0; i--) {
+        if (nums[i] == target) {
+            ending = i;
+            break;
+        }
+    }
+
+    return {starting, ending};
+}
+
+int main() {
+    vector<int> nums = {5, 7, 7, 8, 8, 10};
+    int target = 8;
+
+    vector<int> result = searchRange(nums, target);
+    cout << "[" << result[0] << ", " << result[1] << "]" << endl;
+    return 0;
+}
+Time Complexity
+Finding First Occurrence → O(N)
+Finding Last Occurrence → O(N)
+Overall Complexity → O(N)
+✅ Works but not optimal for large inputs.
+2️⃣ Approach 2: Binary Search (O(log N))
+Since the array is sorted, we can use binary search instead of linear search.
+
+Steps
+Define BinarySearch(nums, target, findFirst)
+Use binary search to find the first and last occurrence.
+If findFirst == true, move left after finding the target.
+If findFirst == false, move right after finding the target.
+Call BinarySearch(nums, target, true) to get the first occurrence.
+Call BinarySearch(nums, target, false) to get the last occurrence.
+Return {firstIndex, lastIndex}.
+Code
+#include <iostream>
+#include <vector>
+using namespace std;
+
+class Solution {
+public:
+    int BinarySearch(vector<int>& nums, int target, bool findFirst) {
+        int start = 0, end = nums.size() - 1, mid;
+        int result = -1;
+
+        while (start <= end) {
+            mid = start + (end - start) / 2;
+
+            if (nums[mid] == target) {
+                result = mid;
+                if (findFirst)
+                    end = mid - 1;  // Search on the left side
+                else
+                    start = mid + 1; // Search on the right side
+            } 
+            else if (nums[mid] < target)
+                start = mid + 1;
+            else
+                end = mid - 1;
+        }
+        return result;
+    }
+
+    vector<int> searchRange(vector<int>& nums, int target) {
+        int first = BinarySearch(nums, target, true);
+        int last = BinarySearch(nums, target, false);
+        return {first, last};
+    }
+};
+
+int main() {
+    Solution sol;
+    vector<int> nums = {5, 7, 7, 8, 8, 10};
+    int target = 8;
+
+    vector<int> result = sol.searchRange(nums, target);
+    cout << "[" << result[0] << ", " << result[1] << "]" << endl;
+    return 0;
+}
+Time Complexity
+First occurrence (Binary Search) → O(log N)
+Last occurrence (Binary Search) → O(log N)
+Overall Complexity → O(log N)
+✅ Much faster than O(N), perfect for large arrays!
+
+
+3️⃣ Approach 3: Using multiset (O(N log N))
+The multiset in C++ stores elements in sorted order and allows duplicate elements.
+Steps
+Insert all elements into a multiset<int>.
+Use lower_bound(target) to find the first occurrence.
+Use upper_bound(target) to find the position after the last occurrence.
+Convert iterators to indices using distance().
+#include <iostream>
+#include <set>
+#include <vector>
+
+using namespace std;
+
+vector<int> searchRange(vector<int>& nums, int target) {
+    multiset<int> s(nums.begin(), nums.end()); // Insert all elements into multiset
+
+    auto first = s.lower_bound(target);  // First occurrence
+    auto last = s.upper_bound(target);   // Position after last occurrence
+
+    if (first == s.end() || *first != target) {
+        return {-1, -1};  // Target not found
+    }
+
+    int firstIndex = distance(s.begin(), first);
+    int lastIndex = distance(s.begin(), last) - 1; // Last actual occurrence
+
+    return {firstIndex, lastIndex};
+}
+
+int main() {
+    vector<int> nums = {5, 7, 7, 8, 8, 10};
+    int target = 8;
+
+    vector<int> result = searchRange(nums, target);
+    cout << "[" << result[0] << ", " << result[1] << "]" << endl;
+
+    return 0;
+}
+Time Complexity
+Building multiset → O(N log N)
+Finding First and Last Position → O(log N)
+Overall Complexity → O(N log N) ✅ Slower than Binary Search but useful when multiple insertions are needed.
+Summary of Three Approaches
+Approach	Time Complexity	Space Complexity	When to Use?
+Brute Force (Linear Search)	O(N)	O(1)	Small arrays, simple solution
+Binary Search (Optimal)	O(log N)	O(1)	Large sorted arrays, best approach 🚀
+Multiset (Ordered Set)	O(N log N)	O(N)	When inserting elements frequently
+Which One Should You Choose?
+If the array is sorted and large → Binary Search (O(log N)) is best.
+If the array is small → Brute Force (O(N)) works fine.
+If you frequently insert elements → Use multiset (O(N log N)).
+Example Runs
+Input:
+nums = {5, 7, 7, 8, 8, 10}
+target = 8
+Output:
+[3, 4]
+
+Input:
+nums = {1, 2, 3, 4, 5}
+target = 6
+
+Output:
+[-1, -1]  // Target not found
+🚀 Conclusion
+For most cases, binary search (O(log N)) is the fastest and most efficient approach! 🔥
