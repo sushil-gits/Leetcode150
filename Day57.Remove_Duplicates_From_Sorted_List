@@ -1,0 +1,73 @@
+Stepwise Approach for deleteDuplicates Function
+This function removes all nodes that have duplicate numbers, leaving only distinct numbers in a sorted linked list.
+
+Understanding the Code
+🔹 Given:
+A sorted linked list where duplicate nodes appear consecutively.
+We need to remove all occurrences of duplicate numbers.
+🔹 Approach Used:
+Dummy Node Technique to simplify head removal cases.
+Two Pointers (prev and head) to track nodes and modify the list.
+Stepwise Breakdown
+Step 1: Initialize the Dummy Node
+ListNode dummy(0, head);
+ListNode *prev = &dummy;
+A dummy node (dummy) is created with value 0 and next pointing to head.
+prev is a pointer to dummy, helping us modify the list without losing reference.
+Step 2: Iterate Through the List
+while (head) {
+Traverse the list until head reaches nullptr (end of list).
+Step 3: Skip Consecutive Duplicates
+while (head->next && head->val == head->next->val)
+    head = head->next;
+If head->val == head->next->val, it means duplicates exist.
+Keep moving head forward until we reach a different value.
+Step 4: Check If head Was Moved
+if (prev->next == head)
+    prev = prev->next;
+else
+    prev->next = head->next;
+If prev->next == head, it means head was not a duplicate → move prev forward.
+Else, head was a duplicate → update prev->next to head->next, skipping duplicates.
+Step 5: Move head Forward
+head = head->next;
+Continue to the next node.
+Step 6: Return the Modified List
+return dummy.next;
+Return dummy.next (new head of the modified list).
+Time & Space Complexity
+Time Complexity: O(n), as we traverse the list once.
+Space Complexity: O(1), since we modify the list in place.
+Example Walkthrough
+Input:
+1 → 2 → 3 → 3 → 4 → 4 → 5
+Execution:
+head	prev	Action
+1 → 2 → 3 → 3 → 4 → 4 → 5	dummy	Move prev
+2 → 3 → 3 → 4 → 4 → 5	prev = 2	Move prev
+3 → 3 → 4 → 4 → 5	prev = 2	Skip 3s
+4 → 4 → 5	prev = 2	Skip 4s
+5	prev = 2	Move prev
+nullptr	Return modified list	
+Output:
+1 → 2 → 5
+
+
+  class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        ListNode dummy(0,head);
+        ListNode *prev=&dummy;
+        while(head)
+        {
+            while(head->next && head->val==head->next->val)
+            head=head->next;
+            if(prev->next==head)
+            prev=prev->next;
+            else
+            prev->next=head->next;
+            head=head->next;
+        }
+        return dummy.next;
+    }
+};
