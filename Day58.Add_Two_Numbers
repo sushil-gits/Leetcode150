@@ -1,0 +1,84 @@
+Step 1: Define the Class and Function
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+This function takes two linked lists (l1 and l2) representing numbers in reverse order.
+It returns a new linked list representing the sum.
+Step 2: Create a Dummy Node
+        ListNode* head = new ListNode(0);
+        ListNode* temp = head;
+        int carry = 0;
+A dummy node (head) is created to simplify list operations.
+temp is used as a pointer to traverse and build the result list.
+carry stores any carry-over values from addition.
+Step 3: Traverse the Lists
+        while(l1 != NULL || l2 != NULL || carry)
+The loop runs as long as there are values in l1, l2, or a carry remains.
+Step 4: Calculate Sum and Carry
+            int data = (l1 ? l1->val : 0) + (l2 ? l2->val : 0) + carry;
+Extract values from l1 and l2. If a list is NULL, consider its value as 0.
+Add the extracted values along with carry.
+            carry = data / 10;
+            data = data % 10;
+Compute the new carry (integer division by 10).
+Extract the last digit of the sum (data % 10).
+Step 5: Create a New Node with the Sum
+            temp->next = new ListNode(data);
+            temp = temp->next;
+Append the newly computed digit as a new node in the result list.
+Move the temp pointer forward.
+Step 6: Move to Next Nodes in l1 and l2
+            if(l1) l1 = l1->next;
+            if(l2) l2 = l2->next;
+Advance l1 and l2 if they are not NULL.
+Step 7: Return the Result
+        ListNode* result = head->next;
+        delete head;
+        return result;
+    }
+};
+The dummy node is removed.
+The actual result list starts from head->next.
+Example Execution
+Input:
+l1 = [2 -> 4 -> 3]  (represents 342)
+l2 = [5 -> 6 -> 4]  (represents 465)
+Process:
+  2 + 5 = 7
+  4 + 6 = 10  (carry = 1, store 0)
+  3 + 4 + 1 = 8
+Output:
+[7 -> 0 -> 8] (represents 807)
+
+
+
+class Solution {
+public:
+     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* head = new ListNode(0);
+        ListNode* temp = head;
+        int carry = 0;
+
+        while(l1 != NULL || l2 != NULL || carry)
+        {
+            int data = (l1 ? l1-> val : 0) + (l2 ? l2-> val : 0) + carry;
+
+            carry = data / 10;
+            data = data % 10;
+
+            temp-> next = new ListNode(data);
+            temp = temp-> next;
+            if(l1)
+            {
+                l1 = l1-> next;
+            }
+            if(l2)
+            {
+                l2 = l2-> next;
+            }
+        }
+        ListNode* result = head-> next;
+        delete head;
+        return result;
+    }
+};
