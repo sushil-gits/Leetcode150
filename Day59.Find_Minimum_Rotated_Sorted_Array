@@ -1,0 +1,103 @@
+Understanding the Problem
+The given array nums is a rotated sorted array.
+Our goal is to find the minimum element efficiently.
+We will use binary search instead of brute force or a priority queue for better performance.
+Stepwise Explanation of Code
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+Step 1: Initializing Variables
+        int s = 0;                   // Start pointer at the first index
+        int e = nums.size() - 1;      // End pointer at the last index
+s points to the start of the array.
+e points to the end of the array.
+Step 2: Applying Binary Search
+        while (s < e) {
+The loop runs as long as s is less than e.
+This ensures we are narrowing down the search space.
+Step 3: Finding the Midpoint
+            int mid = s + (e - s) / 2;
+mid is calculated using (s + e) / 2, but to prevent integer overflow, we use s + (e - s) / 2.
+Step 4: Binary Search Logic
+            if (nums[mid] < nums[e]) {
+                e = mid;
+            } else {
+                s = mid + 1;
+            }
+If nums[mid] < nums[e]:
+The smallest element is in the left half, so update e = mid.
+Otherwise (nums[mid] >= nums[e]):
+The smallest element is in the right half, so update s = mid + 1.
+Step 5: Returning the Minimum Element
+        return nums[s];
+When the loop exits, s will be at the minimum element.
+Return nums[s].
+Time Complexity Analysis
+The algorithm eliminates half of the search space in each iteration.
+Time Complexity: O(log N) (binary search).
+Space Complexity: O(1) (no extra space used).
+Example Walkthrough
+Example 1
+Input: nums = [3, 4, 5, 1, 2]
+Output: 1
+Step-by-step Execution:
+
+s	e	mid	nums[mid]	nums[e]	Action
+0	4	2	5	2	nums[mid] > nums[e], move s to mid + 1
+3	4	3	1	2	nums[mid] < nums[e], move e to mid
+3	3	-	-	-	Exit loop, return nums[3] = 1
+Alternative Approach: Using a Min Heap (Commented Out in Code)
+// priority_queue<int, vector<int>, greater<int>> p;
+// for (int i = 0; i < nums.size(); i++) {
+//     p.push(nums[i]);
+// }
+// return p.top();
+Explanation:
+Inserts all elements into a min heap (priority queue).
+Returns the smallest element.
+Time Complexity: O(N log N) (due to heap insertions).
+Space Complexity: O(N) (due to heap storage).
+Disadvantage: Slower and requires extra space.
+Final Optimized Code
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        int s = 0, e = nums.size() - 1;
+        while (s < e) {
+            int mid = s + (e - s) / 2;
+            if (nums[mid] < nums[e]) {
+                e = mid;
+            } else {
+                s = mid + 1;
+            }
+        }
+        return nums[s];
+    }
+};
+
+
+
+
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        // priority_queue<int,vector<int>,greater<int>>p;
+        // for(int i=0;i<nums.size();i++)
+        // {
+        //     p.push(nums[i]);
+        // }
+        // return p.top();
+
+                int s=0;
+        int e=nums.size()-1;
+        while(s<e){
+            int mid= s+(e-s)/2;
+            if(nums[mid]<nums[e]){
+                e=mid;
+            } else {
+                s=mid+1;
+            }
+        }
+        return nums[s];
+    }
+};
