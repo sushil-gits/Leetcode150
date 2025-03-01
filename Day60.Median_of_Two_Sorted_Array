@@ -1,0 +1,96 @@
+Step 1: Function Definition
+The function signature is:
+double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2)
+It takes two sorted arrays nums1 and nums2 as input.
+It returns a double (since the median can be a decimal value).
+Step 2: Initialize a New Array
+vector<int> v;
+We create an empty vector v to store all elements from both arrays.
+Step 3: Merge nums1 and nums2 into v
+for(auto num : nums1)   
+    v.push_back(num);  // O(n1)
+    
+for(auto num : nums2)  
+    v.push_back(num);  // O(n2)
+We iterate over nums1 and nums2, adding all their elements to v.
+Time Complexity: O(n1 + n2)
+Example:
+nums1 = [1, 3]
+nums2 = [2, 4]
+After merging:
+v = [1, 3, 2, 4]
+Step 4: Sort the Combined Array
+sort(v.begin(), v.end());  // O(n log n)
+The sort() function sorts the merged array.
+Time Complexity: O(n log n)
+Example after sorting:
+v = [1, 2, 3, 4]
+Step 5: Find the Median
+int n = v.size();  // O(1)
+We store the size of the sorted array in n.
+Step 6: Compute the Median
+return n % 2 ? v[n/2] : (v[n/2 - 1] + v[n/2]) / 2.0;
+If n is odd, return the middle element (v[n/2]).
+If n is even, return the average of the two middle elements.
+Example 1 (Odd Length):
+v = [1, 2, 3] → Median = 2
+Example 2 (Even Length):
+v = [1, 2, 3, 4] → Median = (2 + 3) / 2 = 2.5
+Full Code:
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        // Step 1: Initialize an empty vector
+        vector<int> v;
+
+        // Step 2: Merge nums1 into v
+        for(auto num : nums1)   
+            v.push_back(num);
+        
+        // Step 3: Merge nums2 into v
+        for(auto num : nums2)  
+            v.push_back(num);
+        
+        // Step 4: Sort the combined array
+        sort(v.begin(), v.end());
+        
+        // Step 5: Compute median
+        int n = v.size();
+        return n % 2 ? v[n/2] : (v[n/2 - 1] + v[n/2]) / 2.0;
+    }
+};
+Time Complexity Analysis
+Operation	Time Complexity
+Merging nums1 & nums2	O(n1 + n2)
+Sorting the array	O(n log n)
+Finding median	O(1)
+Total Complexity	O(n log n)
+This solution is not optimal because of the sorting step (O(n log n)). A better approach would be binary search (O(log(min(n1, n2)))), which I explained in my previous response.
+
+
+
+double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+       // Initialization some neccessary variables
+        vector<int>v;
+        
+        // store the array in the new array
+        for(auto num:nums1)   // O(n1)
+            v.push_back(num);
+        
+        for(auto num:nums2)  // O(n2)
+            v.push_back(num);
+        
+        // Sort the array to find the median
+        sort(v.begin(),v.end());  // O(nlogn)
+        
+        // Find the median and Return it
+        int n=v.size();  // O(n)
+        
+        return n%2?v[n/2]:(v[n/2-1]+v[n/2])/2.0;
+
+
+    }
