@@ -1,0 +1,65 @@
+Problem Statement:
+We are given the root of a binary tree, and we need to find its maximum depth.
+The depth of a tree is the number of nodes along the longest path from the root node down to the farthest leaf node.
+
+Step-by-Step Approach:
+Step 1: Understand the Base Case
+If the root is NULL (empty tree), then the depth is 0.
+This serves as our base case in recursion.
+if (!root) 
+    return 0;
+Step 2: Recursively Find the Depth of Left and Right Subtrees
+We use recursion to calculate the depth of the left subtree and right subtree.
+int maxleft = maxDepth(root->left);   // Recursive call for left child
+int maxright = maxDepth(root->right); // Recursive call for right child
+Each recursive call goes deeper into the tree, reaching the leaf nodes, and then starts returning values.
+
+Step 3: Take the Maximum of Left and Right Depths
+Since we want the maximum depth, we take the maximum value between the left and right subtree depths.
+return max(maxleft, maxright) + 1;
+The +1 accounts for the current node itself.
+Dry Run Example:
+Consider the following binary tree:
+        1
+       / \
+      2   3
+     / \
+    4   5
+Start at root = 1, call maxDepth(root->left) and maxDepth(root->right).
+Move to root = 2, call maxDepth(root->left) and maxDepth(root->right).
+Move to root = 4, call maxDepth(NULL), return 0.
+Call maxDepth(NULL), return 0.
+So, depth of node 4 = max(0, 0) + 1 = 1
+Move to root = 5, call maxDepth(NULL), return 0.
+Call maxDepth(NULL), return 0.
+So, depth of node 5 = max(0, 0) + 1 = 1
+Depth of node 2 = max(1, 1) + 1 = 2
+Move to root = 3, call maxDepth(NULL), return 0.
+Call maxDepth(NULL), return 0.
+So, depth of node 3 = max(0, 0) + 1 = 1
+Finally, depth of root 1 = max(2, 1) + 1 = 3
+Final Output:
+The maximum depth of the tree is 3.
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if(!root)
+        return 0;
+        int maxleft=maxDepth(root->left);
+        int maxright=maxDepth(root->right);
+        return max(maxleft,maxright)+1;
+    }
+};
