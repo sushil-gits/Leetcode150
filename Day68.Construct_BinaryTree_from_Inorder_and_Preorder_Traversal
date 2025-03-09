@@ -1,0 +1,145 @@
+Stepwise Approach for Constructing a Binary Tree from Preorder and Inorder Traversals
+This function constructs a binary tree from given preorder and inorder traversals.
+
+Step 1: Understanding the Traversals
+Preorder Traversal (Root -> Left -> Right)
+The first element in preorder is always the root of the current subtree.
+Inorder Traversal (Left -> Root -> Right)
+This helps in determining the left and right subtrees of the root.
+Step 2: buildTree() Function (Driver Function)
+Objective:
+Initializes necessary variables and calls constructTree() to build the tree recursively.
+Implementation Steps:
+Extract the preStart (start index of preorder) and preEnd (end index of preorder).
+Extract the inStart (start index of inorder) and inEnd (end index of inorder).
+Create a hashmap (mp) to store the index of each value in the inorder traversal for quick lookup.
+Call the recursive function constructTree() with these parameters.
+TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+    int preStart = 0, preEnd = preorder.size() - 1;
+    int inStart = 0, inEnd = inorder.size() - 1;
+    
+    // Create a hashmap for quick lookup of inorder indices
+    map<int, int> mp;
+    for (int i = inStart; i <= inEnd; i++) {
+        mp[inorder[i]] = i;
+    }
+
+    // Call the recursive function to construct the tree
+    return constructTree(preorder, preStart, preEnd, inorder, inStart, inEnd, mp);
+}
+Step 3: constructTree() Function (Recursive Function)
+Objective:
+Recursively constructs the binary tree by identifying the root, left subtree, and right subtree.
+Implementation Steps:
+Base Case:
+
+If preStart > preEnd or inStart > inEnd, return NULL (no more elements to process).
+Create the Root Node:
+
+The first element of the preorder traversal (preorder[preStart]) is the root.
+Create a new TreeNode with this value.
+Find Root Position in inorder:
+
+Use mp to get the index elem of root->val in the inorder array.
+The left subtree consists of elements from inStart to elem - 1.
+The right subtree consists of elements from elem + 1 to inEnd.
+Determine Number of Elements in Left Subtree (nElem):
+
+nElem = elem - inStart (Number of nodes in the left subtree).
+Recursive Calls for Left and Right Subtrees:
+
+Left Subtree:
+
+preStart + 1 to preStart + nElem in preorder.
+inStart to elem - 1 in inorder.
+Right Subtree:
+
+preStart + nElem + 1 to preEnd in preorder.
+elem + 1 to inEnd in inorder.
+TreeNode* constructTree(vector<int>& preorder, int preStart, int preEnd, 
+                        vector<int>& inorder, int inStart, int inEnd, 
+                        map<int, int>& mp) {
+    // Base Case: If range is invalid, return NULL
+    if (preStart > preEnd || inStart > inEnd) return NULL;
+
+    // Create the root node with the first element of preorder
+    TreeNode* root = new TreeNode(preorder[preStart]);
+
+    // Get the index of root value in inorder traversal
+    int elem = mp[root->val];
+    
+    // Number of elements in the left subtree
+    int nElem = elem - inStart;
+
+    // Recursive call to construct left and right subtrees
+    root->left = constructTree(preorder, preStart + 1, preStart + nElem, inorder, inStart, elem - 1, mp);
+    root->right = constructTree(preorder, preStart + nElem + 1, preEnd, inorder, elem + 1, inEnd, mp);
+
+    return root;
+}
+Step 4: Dry Run Example
+Input:
+preorder = [3, 9, 20, 15, 7]
+inorder  = [9, 3, 15, 20, 7]
+Tree Construction Process:
+Step	Root (Preorder)	Left Subtree (Inorder)	Right Subtree (Inorder)
+1	3	[9]	[15, 20, 7]
+2	9	[]	[]
+3	20	[15]	[7]
+4	15	[]	[]
+5	7	[]	[]
+Final Tree Structure
+      3
+     / \
+    9   20
+       /  \
+      15   7
+Time Complexity Analysis
+Each node is processed once, and the lookup in mp takes O(1).
+The recursive calls result in O(n) total operations.
+Overall Complexity: O(n).
+Final Summary
+Use buildTree() to create a hashmap of inorder indices and call constructTree().
+constructTree() uses recursion to:
+Identify the root from preorder.
+Find the root's position in inorder.
+Recursively build the left and right subtrees.
+Efficiently constructs the tree in O(n) time using a hashmap.
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+TreeNode* constructTree(vector < int > & preorder, int preStart, int preEnd, vector < int > & inorder, int inStart, int inEnd, map < int, int > & mp)
+{
+  if (preStart > preEnd || inStart > inEnd) return NULL;
+  TreeNode* root = new TreeNode(preorder[preStart]);
+  int elem = mp[root -> val];
+  int nElem = elem - inStart;
+  root -> left = constructTree(preorder, preStart + 1, preStart + nElem, inorder,inStart, elem - 1, mp);
+  root -> right = constructTree(preorder, preStart + nElem + 1, preEnd, inorder,elem + 1, inEnd, mp);
+  return root;
+}
+
+TreeNode* buildTree(vector < int > & preorder, vector < int > & inorder) 
+{
+  int preStart = 0, preEnd = preorder.size() - 1;
+  int inStart = 0, inEnd = inorder.size() - 1;
+  map < int, int > mp;
+  for (int i = inStart; i <= inEnd; i++) 
+   {
+     mp[inorder[i]] = i;
+   }
+
+  return constructTree(preorder, preStart, preEnd, inorder, inStart, inEnd, mp);
+}
+};
