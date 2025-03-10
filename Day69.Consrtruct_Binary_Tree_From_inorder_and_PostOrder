@@ -1,0 +1,103 @@
+Approach to Construct a Binary Tree from Inorder and Postorder Traversal
+This algorithm constructs a Binary Tree from given Inorder and Postorder traversal arrays using Recursion & Hashing.
+
+Step 1: Understanding Inorder & Postorder Traversals
+Inorder Traversal (Left → Root → Right):
+It helps determine left and right subtrees of a node.
+Postorder Traversal (Left → Right → Root):
+The last element in postorder is always the root of the subtree.
+Step 2: Observing the Recursive Construction
+The last element of postorder is the current root.
+Find this element's index in inorder using a hash map (mpp).
+Everything left of this index in inorder is the left subtree.
+Everything right of this index in inorder is the right subtree.
+Step 3: Recursive Tree Construction
+Function solve()
+TreeNode* solve(vector<int>& inorder, int InStart, int InEnd, 
+                vector<int>& postorder, int PostStart, int PostEnd, 
+                map<int, int>& mpp)
+Base Case:
+
+If InStart > InEnd or PostStart > PostEnd, return NULL (invalid subtree).
+Step 1: Pick the last element from postorder[PostEnd] as the current root.
+TreeNode* node = new TreeNode(postorder[PostEnd]);
+Step 2: Find this element's position in inorder using the hash map (mpp).
+int node_position = mpp[node->val];
+Step 3: Compute the number of elements in the left subtree.
+int leftLen = node_position - InStart;
+Step 4: Recursively build the left and right subtrees.
+node->left = solve(inorder, InStart, node_position - 1, 
+                   postorder, PostStart, PostStart + leftLen - 1, mpp);
+node->right = solve(inorder, node_position + 1, InEnd, 
+                    postorder, PostStart + leftLen, PostEnd - 1, mpp);
+The left subtree is built using postorder elements before leftLen.
+The right subtree is built using postorder elements after leftLen.
+Return the constructed node.
+
+Step 4: Build Tree using buildTree()
+TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+    map<int, int> mpp;
+    for (int i = 0; i < inorder.size(); ++i) {
+        mpp[inorder[i]] = i;
+    }
+    return solve(inorder, 0, inorder.size() - 1, 
+                 postorder, 0, postorder.size() - 1, mpp);
+}
+A hash map (mpp) is created to store index positions of elements in inorder for O(1) lookups.
+Calls solve() to recursively construct the tree.
+Time and Space Complexity
+Time Complexity: 
+𝑂
+(
+𝑁
+)
+O(N)
+O(N) for hash map creation.
+O(N) recursive calls, each handling a constant amount of work.
+Space Complexity: 
+𝑂
+(
+𝑁
+)
+O(N) (due to recursion stack and hash map storage).
+Final Notes
+✅ Recursive approach ensures efficient tree construction.
+✅ Hash map optimization reduces O(N²) lookups to O(N).
+✅ Inorder and Postorder properties are effectively utilized for subtree identification.
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+ TreeNode* solve(vector<int>&inorder, int InStart, int InEnd, vector<int>& postorder, int PostStart, int PostEnd, map<int, int>&mpp){
+    if(InStart>InEnd || PostStart> PostEnd) return NULL;
+
+    TreeNode* node = new TreeNode(postorder[PostEnd]);
+
+    int node_position = mpp[node->val];
+
+    int leftLen = node_position - InStart;
+
+    node->left = solve(inorder,InStart, node_position-1, postorder, PostStart, PostStart + leftLen-1, mpp);
+    node->right = solve(inorder,node_position+1, InEnd, postorder, PostStart+leftLen, PostEnd-1, mpp);
+    return node;
+ }
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+       map<int, int>mpp;
+        for(int i=0;i<inorder.size();++i){
+            mpp[inorder[i]] = i;
+        }
+
+        TreeNode* root = solve(inorder, 0, inorder.size()-1, postorder, 0, postorder.size()-1, mpp);
+        return root;  
+    }
+};
