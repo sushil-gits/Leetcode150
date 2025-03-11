@@ -1,0 +1,95 @@
+Stepwise Approach for Counting Islands Using DFS
+This function counts the number of islands in a 2D grid, where '1' represents land and '0' represents water. The function uses Depth-First Search (DFS) to traverse connected land areas.
+
+Step 1: Handle Edge Case
+If the grid is empty (grid.empty()) or contains no rows (grid[0].empty()), return 0 since there are no islands.
+Step 2: Initialize Island Count
+Declare numIslands = 0 to keep track of the total number of islands.
+Step 3: Iterate Through the Grid
+Use two nested loops to traverse each cell in the 2D grid:
+Outer loop iterates over rows (i = 0 to grid.size() - 1).
+Inner loop iterates over columns (j = 0 to grid[0].size() - 1).
+Step 4: Check for an Unvisited Island ('1')
+If grid[i][j] == '1', it means we found a new island:
+Increment the island count (numIslands++).
+Start a DFS traversal from this position to mark all connected '1's as visited.
+Step 5: DFS Function to Traverse the Island
+The function dfs(grid, i, j) is a recursive DFS that:
+Base Case: Stops if:
+i or j goes out of bounds.
+The current cell is not '1' (either water '0' or already visited).
+Mark the cell as visited (grid[i][j] = '0').
+Recursively call DFS for four possible directions (up, down, left, right).
+Step 6: Return the Total Count
+After checking all cells, return numIslands as the final count.
+Time and Space Complexity Analysis
+Time Complexity: 
+𝑂
+(
+𝑁
+×
+𝑀
+)
+O(N×M)
+Every cell is visited once, and DFS explores up to four directions.
+Space Complexity: 
+𝑂
+(
+𝑁
+×
+𝑀
+)
+O(N×M) (worst case, in case of recursion stack for DFS).
+Example Walkthrough
+Input Grid
+[
+  ['1', '1', '0', '0', '0'],
+  ['1', '1', '0', '0', '0'],
+  ['0', '0', '1', '0', '0'],
+  ['0', '0', '0', '1', '1']
+]
+Execution Steps
+(0,0) is '1' → Increment count (1) and call DFS → Mark all connected '1's.
+(2,2) is '1' → Increment count (2) and call DFS → Mark as visited.
+(3,3) is '1' → Increment count (3) and call DFS → Mark connected '1's.
+Final Output
+3 islands
+
+Final Thoughts
+DFS is useful for finding connected components in a grid.
+Changing '1' to '0' avoids using extra space for a visited array.
+Alternative: Use BFS (queue-based traversal) for the same problem.
+
+class Solution {
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        if (grid.empty() || grid[0].empty()) {
+            return 0;
+        }
+        
+        int numIslands = 0;
+        for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid[0].size(); j++) {
+                if (grid[i][j] == '1') {
+                    numIslands++;
+                    dfs(grid, i, j);
+                }
+            }
+        }
+        
+        return numIslands;
+    }
+    
+private:
+    void dfs(vector<vector<char>>& grid, int i, int j) {
+        if (i < 0 || i >= grid.size() || j < 0 || j >= grid[0].size() || grid[i][j] != '1') {
+            return;
+        }
+        
+        grid[i][j] = '0'; // mark as visited
+        dfs(grid, i + 1, j); // down
+        dfs(grid, i - 1, j); // up
+        dfs(grid, i, j + 1); // right
+        dfs(grid, i, j - 1); // left
+    }
+};
