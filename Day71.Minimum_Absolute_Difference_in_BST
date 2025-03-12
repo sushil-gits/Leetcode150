@@ -1,0 +1,359 @@
+Step 1: Initialize Global Variables
+int minDifference = INT_MAX, preValue = -1;
+minDifference: Tracks the smallest absolute difference found so far. Initialized to INT_MAX to ensure any valid difference will be smaller.
+
+preValue: Stores the value of the previously visited node during the in-order traversal. Initialized to -1 to indicate no node has been visited yet.
+
+Step 2: Define the getMinimumDifference Function
+int getMinimumDifference(TreeNode* root) {
+This function takes the root of the BST as input and returns the minimum absolute difference between any two nodes.
+
+Step 3: Handle the Base Case
+if (!root)
+    return minDifference;
+If the current node (root) is nullptr (i.e., the tree is empty or we've reached a leaf node), return the current value of minDifference.
+
+Step 4: Traverse the Left Subtree
+getMinimumDifference(root->left);
+Recursively traverse the left subtree. This ensures that nodes are visited in ascending order (in-order traversal of a BST).
+
+Step 5: Compute the Difference with the Previous Node
+if (preValue >= 0)
+    minDifference = min(minDifference, root->val - preValue);
+If preValue is valid (i.e., a previous node has been visited), compute the difference between the current node's value (root->val) and the previous node's value (preValue).
+
+Update minDifference to the smaller value between the current minDifference and the newly computed difference.
+
+Step 6: Update the Previous Node Value
+preValue = root->val;
+Set preValue to the value of the current node (root->val). This ensures that the next node visited will compute its difference with this node.
+
+Step 7: Traverse the Right Subtree
+getMinimumDifference(root->right);
+Recursively traverse the right subtree. This continues the in-order traversal, ensuring all nodes are visited in ascending order.
+
+Step 8: Return the Result
+return minDifference;
+After traversing the entire tree, return the final value of minDifference, which is the minimum absolute difference between any two nodes in the BST.
+
+Full Code with Stepwise Comments
+int minDifference = INT_MAX, preValue = -1;
+
+int getMinimumDifference(TreeNode* root) {
+    // Step 3: Handle the base case
+    if (!root)
+        return minDifference;
+
+    // Step 4: Traverse the left subtree
+    getMinimumDifference(root->left);
+
+    // Step 5: Compute the difference with the previous node
+    if (preValue >= 0)
+        minDifference = min(minDifference, root->val - preValue);
+
+    // Step 6: Update the previous node value
+    preValue = root->val;
+
+    // Step 7: Traverse the right subtree
+    getMinimumDifference(root->right);
+
+    // Step 8: Return the result
+    return minDifference;
+}
+Key Points
+In-Order Traversal: The function uses in-order traversal to visit nodes in ascending order, which simplifies the calculation of the minimum difference.
+
+Global Variables: minDifference and preValue are used to track the minimum difference and the value of the previously visited node, respectively.
+
+Time Complexity: O(N), where N is the number of nodes in the tree, as each node is visited once.
+
+Space Complexity: O(H), where H is the height of the tree, due to the recursion stack. In the worst case (a skewed tree), this becomes O(N).
+
+Example Walkthrough
+Consider the following BST:
+
+    4
+   / \
+  2   6
+ / \ / \
+1  3 5  7
+In-order traversal yields: [1, 2, 3, 4, 5, 6, 7].
+
+Differences between consecutive nodes:
+
+2 - 1 = 1
+
+3 - 2 = 1
+
+4 - 3 = 1
+
+5 - 4 = 1
+
+6 - 5 = 1
+
+7 - 6 = 1
+
+The minimum difference is 1.
+
+The function will return 1 as the result.
+
+with complexity analysis
+Complexity Analysis
+Let’s analyze the time and space complexity of the provided code step by step.
+
+1. Time Complexity
+The time complexity is determined by the number of nodes visited in the BST and the operations performed at each node.
+
+Steps Contributing to Time Complexity:
+In-Order Traversal:
+
+The function performs an in-order traversal of the BST.
+
+In-order traversal visits every node exactly once.
+
+If the BST has N nodes, the traversal takes O(N) time.
+
+Difference Calculation:
+
+At each node, the difference between the current node's value and the previous node's value is calculated.
+
+This operation takes O(1) time per node.
+
+Updating minDifference:
+
+The min function is used to update minDifference at each node.
+
+This operation also takes O(1) time per node.
+
+Overall Time Complexity:
+Since each node is visited once, and constant-time operations are performed at each node, the total time complexity is:
+
+Time Complexity
+=
+O
+(
+N
+)
+Time Complexity=O(N)
+where N is the number of nodes in the BST.
+
+2. Space Complexity
+The space complexity is determined by the recursion stack used during the in-order traversal.
+
+Steps Contributing to Space Complexity:
+Recursion Stack:
+
+The function uses recursion to traverse the BST.
+
+The maximum depth of the recursion stack is equal to the height of the BST (H).
+
+In the worst case (a skewed tree), the height of the BST is H = N, where N is the number of nodes.
+
+In the best case (a balanced tree), the height of the BST is H = log(N).
+
+Global Variables:
+
+The global variables minDifference and preValue use constant space (O(1)).
+
+Overall Space Complexity:
+The space complexity is dominated by the recursion stack:
+
+Space Complexity
+=
+O
+(
+H
+)
+Space Complexity=O(H)
+where H is the height of the BST.
+
+In the worst case (skewed tree):
+
+Space Complexity
+=
+O
+(
+N
+)
+Space Complexity=O(N)
+In the best case (balanced tree):
+
+Space Complexity
+=
+O
+(
+log
+⁡
+N
+)
+Space Complexity=O(logN)
+Summary of Complexity
+Complexity	Best Case (Balanced Tree)	Worst Case (Skewed Tree)
+Time	
+O
+(
+N
+)
+O(N)	
+O
+(
+N
+)
+O(N)
+Space	
+O
+(
+log
+⁡
+N
+)
+O(logN)	
+O
+(
+N
+)
+O(N)
+Explanation with Example
+Example 1: Balanced BST
+Copy
+      4
+     / \
+    2   6
+   / \ / \
+  1  3 5  7
+Number of Nodes (N): 7
+
+Height (H): 
+log
+⁡
+2
+(
+7
+)
+≈
+3
+log 
+2
+​
+ (7)≈3
+
+Time Complexity: 
+O
+(
+7
+)
+=
+O
+(
+N
+)
+O(7)=O(N)
+
+Space Complexity: 
+O
+(
+log
+⁡
+7
+)
+=
+O
+(
+log
+⁡
+N
+)
+O(log7)=O(logN)
+
+Example 2: Skewed BST
+Copy
+    1
+     \
+      2
+       \
+        3
+         \
+          4
+           \
+            5
+Number of Nodes (N): 5
+
+Height (H): 5
+
+Time Complexity: 
+O
+(
+5
+)
+=
+O
+(
+N
+)
+O(5)=O(N)
+
+Space Complexity: 
+O
+(
+5
+)
+=
+O
+(
+N
+)
+O(5)=O(N)
+
+Key Takeaways
+The time complexity is always 
+O
+(
+N
+)
+O(N) because every node is visited once.
+
+The space complexity depends on the height of the tree:
+
+O
+(
+log
+⁡
+N
+)
+O(logN) for balanced trees.
+
+O
+(
+N
+)
+O(N) for skewed trees.
+
+The use of in-order traversal ensures that nodes are visited in ascending order, making it easy to compute the minimum difference between consecutive nodes.
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+int minDifference=INT_MAX,preValue=-1;
+    int getMinimumDifference(TreeNode* root) {
+        if(!root)
+        return minDifference;
+        getMinimumDifference(root->left);
+        // compute difference with previous node
+        if(preValue>=0)
+        minDifference=min(minDifference,root->val-preValue);
+        // update previous nonde value
+        preValue=root->val;
+        getMinimumDifference(root->right);
+        return minDifference;
+    }
+};
