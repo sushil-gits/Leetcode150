@@ -1,0 +1,97 @@
+Stepwise Solution Approach for Course Schedule (Cycle Detection in a Directed Graph)
+This function determines whether all courses can be finished given a list of prerequisite dependencies. The problem can be represented as detecting a cycle in a directed graph.
+
+Step 1: Graph Representation
+We are given N courses (nodes in the graph) and a list of prerequisites (arr), where each pair [a, b] means course a depends on course b.
+We need to detect cycles in this dependency graph.
+If there's a cycle, it means there's no way to complete all courses.
+Adjacency List Representation:
+vector<vector<int>> adj(N);
+for (auto& edge : arr) {
+    adj[edge[1]].push_back(edge[0]); // Directed edge from edge[1] → edge[0]
+}
+This step constructs the graph where each course points to the courses that depend on it.
+Step 2: Depth First Search (DFS) for Cycle Detection
+We use DFS to traverse the graph and detect cycles.
+
+DFS Function (dfs)
+bool dfs(int node, vector<vector<int>>& adj, vector<int>& visited) {
+    if (visited[node] == 1) return true;  // Cycle detected
+    if (visited[node] == 2) return false; // Already processed, no cycle
+    
+    visited[node] = 1; // Mark node as "being processed"
+    
+    for (int neighbor : adj[node]) {
+        if (dfs(neighbor, adj, visited)) {
+            return true; // Cycle found
+        }
+    }
+    
+    visited[node] = 2; // Mark node as "processed"
+    return false;
+}
+Base cases:
+If visited[node] == 1, it means we are visiting a node that is already in the recursion stack → Cycle detected.
+If visited[node] == 2, it means this node has been fully explored before → No cycle.
+Recursive Step:
+Mark visited[node] = 1 (Currently being processed)
+Call dfs on all its neighbors.
+If any recursive call returns true, a cycle is found.
+Otherwise, mark visited[node] = 2 (Processing complete for this node).
+Step 3: Apply DFS to Each Course
+vector<int> visited(N, 0);
+for (int i = 0; i < N; i++) {
+    if (visited[i] == 0 && dfs(i, adj, visited)) {
+        return false; // Cycle found, cannot finish courses
+    }
+}
+return true; // No cycle, can finish all courses
+We loop through all courses (i from 0 to N-1).
+If the course is unvisited (visited[i] == 0), we start a DFS.
+If DFS detects a cycle, return false.
+If no cycle is found after checking all nodes, return true.
+Time Complexity Analysis
+Graph Construction: O(E), where E is the number of edges (prerequisites).
+DFS Traversal: O(N + E), since we visit each node and edge once.
+Overall Complexity: O(N + E).
+Final Summary
+Graph Representation: Convert prerequisites into a directed graph.
+Cycle Detection using DFS:
+visited[node] == 1: Cycle detected.
+visited[node] == 2: Node already processed.
+visited[node] == 0: Explore using DFS.
+Final Check:
+If a cycle exists, return false (cannot finish courses).
+If no cycle exists, return true (all courses can be completed).
+
+class Solution {
+public:
+   bool dfs(int node, vector<vector<int>>& adj, vector<int>& visited) {
+        if (visited[node] == 1) return true; 
+        if (visited[node] == 2) return false; 
+        
+        visited[node] = 1;
+        for (int neighbor : adj[node]) {
+            if (dfs(neighbor, adj, visited)) {
+                return true;
+            }
+        }
+        visited[node] = 2;
+        return false;
+    }
+    
+   bool canFinish(int N, vector<vector<int>>& arr) {
+        vector<vector<int>> adj(N);
+        for (auto& edge : arr) {
+            adj[edge[1]].push_back(edge[0]);
+        }
+        
+        vector<int> visited(N, 0);
+        for (int i = 0; i < N; i++) {
+            if (visited[i] == 0 && dfs(i, adj, visited)) {
+                return false; 
+            }
+        }
+        return true ; 
+    }
+};
