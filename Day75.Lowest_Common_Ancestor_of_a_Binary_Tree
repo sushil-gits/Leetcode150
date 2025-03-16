@@ -1,0 +1,108 @@
+Approach for Finding Lowest Common Ancestor (LCA) in a Binary Tree
+The given approach efficiently finds the Lowest Common Ancestor (LCA) of two nodes p and q in a binary tree using a BFS traversal and parent tracking. Let's break it down step by step.
+
+Step-by-Step Approach
+1. Use BFS to Build a Parent Map
+Initialize a queue (q_) for level-order traversal (BFS).
+Create a hash map (parent) to store each node's parent.
+Perform BFS starting from the root:
+If a node has a left child, store {left -> parent} in parent and push left into the queue.
+If a node has a right child, store {right -> parent} in parent and push right into the queue.
+Stop when both p and q have been encountered (i.e., both are found in the parent map).
+2. Track the Ancestors of Node p
+Use a hash set (ancestors) to store all ancestors of node p, including p itself.
+Move up the tree using parent[p], inserting each node into ancestors, until p becomes nullptr.
+3. Find the Lowest Common Ancestor
+Start from q and keep moving up the tree using parent[q].
+As soon as a node in q's ancestor chain matches an entry in ancestors, return it as the Lowest Common Ancestor (LCA).
+Code Explanation
+TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+    queue<TreeNode*> q_{{root}};  // Queue for BFS traversal
+    unordered_map<TreeNode*, TreeNode*> parent{{root, nullptr}};  // Stores parent of each node
+    unordered_set<TreeNode*> ancestors;  // Stores ancestors of p
+
+    // Step 1: Perform BFS to populate the parent map
+    while (!parent.count(p) || !parent.count(q)) {
+        root = q_.front();
+        q_.pop();
+
+        if (root->left) {
+            parent[root->left] = root;
+            q_.push(root->left);
+        }
+        if (root->right) {
+            parent[root->right] = root;
+            q_.push(root->right);
+        }
+    }
+
+    // Step 2: Store all ancestors of p in the set
+    while (p) {
+        ancestors.insert(p);
+        p = parent[p];
+    }
+
+    // Step 3: Find the first common ancestor from q’s path
+    while (!ancestors.count(q)) {
+        q = parent[q];
+    }
+
+    return q;  // The first ancestor in p's path found in q's path
+}
+Complexity Analysis
+Time Complexity: O(N)
+
+BFS traversal visits all nodes O(N).
+Traversing p's ancestors takes O(H) (H = height of tree).
+Traversing q's ancestors takes O(H).
+Since H ≤ N, the worst-case complexity is O(N).
+Space Complexity: O(N)
+
+parent map stores each node’s parent O(N).
+ancestors set stores at most O(H) nodes.
+queue stores at most O(W) nodes (W = width of tree).
+The worst-case space complexity is O(N).
+Key Takeaways
+✅ Uses BFS to efficiently find parents of all nodes.
+✅ Tracks ancestors of p in a hash set.
+✅ Traverses q's ancestors to find the first common node.
+✅ Handles arbitrary binary trees (not just BSTs).
+
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        queue<TreeNode*> q_{{root}};
+    unordered_map<TreeNode*, TreeNode*> parent{{root, nullptr}};
+    unordered_set<TreeNode*> ancestors;  
+    while (!parent.count(p) || !parent.count(q)) {
+      root = q_.front(), q_.pop();
+      if (root->left) {
+        parent[root->left] = root;
+        q_.push(root->left);
+      }
+      if (root->right) {
+        parent[root->right] = root;
+        q_.push(root->right);
+      }
+    }
+    while (p) {
+      ancestors.insert(p);
+      p = parent[p];  
+    }
+    while (!ancestors.count(q)){
+      q = parent[q];
+    }
+    return q; 
+    }
+};
