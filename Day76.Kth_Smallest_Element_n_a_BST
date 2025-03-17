@@ -1,0 +1,128 @@
+Stepwise Approach for kthSmallest Function in a BST
+This function finds the k-th smallest element in a Binary Search Tree (BST) using inorder traversal (Left → Root → Right).
+
+Step 1: Understand the Function Inputs & Outputs
+Input:
+TreeNode* root → Root node of the BST.
+int k → The k-th smallest element to find.
+Output:
+Returns the value of the k-th smallest element in the BST.
+Step 2: Define a Global Counter
+int count = 0; is a global counter to keep track of how many nodes have been visited during inorder traversal.
+It helps us determine when we reach the k-th smallest element.
+Step 3: Call the Helper Function
+The function helper(root, k) is called to perform inorder traversal and find the k-th smallest element.
+The returned node's value is returned.
+TreeNode* result = helper(root, k);
+return result ? result->val : 0; // Return value if found, else 0
+Step 4: Define the Recursive Helper Function
+The function helper(TreeNode* root, int k) is used for inorder traversal.
+
+Base Case (Stopping Condition)
+if (root == nullptr) return nullptr;
+If the node is nullptr, return nullptr.
+This prevents unnecessary recursion.
+Step 5: Traverse the Left Subtree (Recursive Call)
+TreeNode* left = helper(root->left, k);
+if (left != nullptr) return left;
+First, traverse the left subtree recursively.
+If the left subtree contains the k-th smallest element, return it immediately.
+Step 6: Process the Current Node
+count++; // Increment count when visiting a node
+if (count == k) return root; // If k-th smallest, return the node
+Increment count each time a node is visited.
+If count == k, return the current node (since we found the k-th smallest element).
+Step 7: Traverse the Right Subtree (Recursive Call)
+return helper(root->right, k);
+If the k-th smallest element is not found in the left subtree or the current node, traverse the right subtree.
+The result from the right subtree is returned.
+Step 8: Return the Final Result
+If the function finds the k-th smallest element, it returns the node.
+Otherwise, it returns nullptr, and kthSmallest() handles this by returning 0.
+Time Complexity Analysis
+Best Case: 
+𝑂
+(
+1
+)
+O(1) (If the k-th smallest element is near the root).
+Worst Case: 
+𝑂
+(
+𝑁
+)
+O(N) (If the BST is skewed).
+Average Case: 
+𝑂
+(
+𝐻
+)
+O(H) (where H is the height of the BST, which is 
+𝑂
+(
+log
+⁡
+𝑁
+)
+O(logN) for a balanced BST).
+Example Execution
+Example BST:
+markdown
+Copy
+Edit
+       5
+      / \
+     3   6
+    / \
+   2   4
+  /
+ 1
+Find k = 3 (3rd smallest element)
+Step 1: Traverse left subtree of 5 → Move to 3
+Step 2: Traverse left subtree of 3 → Move to 2
+Step 3: Traverse left subtree of 2 → Move to 1
+Step 4: Visit 1, count = 1 (not k-th element)
+Step 5: Backtrack to 2, count = 2 (not k-th element)
+Step 6: Backtrack to 3, count = 3 (k-th element found!)
+Return: 3
+Thus, the 3rd smallest element is 3. ✅
+
+Final Summary
+✅ Uses inorder traversal (Left → Root → Right).
+✅ Stops early if the k-th element is found.
+✅ Efficient for BSTs due to the sorted property.
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+class TreeNode {
+public:
+    int val;
+    TreeNode *left, *right;
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};
+
+class Solution {
+public:
+    int count = 0; // Counter for visited nodes
+
+    int kthSmallest(TreeNode* root, int k) {
+        TreeNode* result = helper(root, k);
+        return result ? result->val : 0; // Return value or 0 if not found
+    }
+
+    TreeNode* helper(TreeNode* root, int k) {
+        if (root == nullptr) return nullptr;
+
+        // Traverse left subtree
+        TreeNode* left = helper(root->left, k);
+        if (left != nullptr) return left; // If found in left subtree
+
+        count++; // Increment count for current node
+        if (count == k) return root; // Found k-th smallest
+
+        // Traverse right subtree
+        return helper(root->right, k);
+    }
+};
