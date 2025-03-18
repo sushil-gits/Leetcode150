@@ -1,0 +1,76 @@
+Stepwise Approach for sumNumbers(TreeNode* root)
+This function calculates the sum of all root-to-leaf numbers in a binary tree, treating each path as a number.
+
+Step 1: Understanding the Problem
+Each root-to-leaf path forms a number by concatenating the node values.
+The function computes the sum of all such numbers.
+Example
+markdown
+        1
+       / \
+      2   3
+Paths:
+
+1 → 2 → Number: 12
+1 → 3 → Number: 13
+Total sum = 12 + 13 = 25
+Step 2: Define the Recursive Helper Function
+The function help(TreeNode* root, int sum) performs a Depth First Search (DFS).
+
+Base Case: If the root is NULL, return 0 (no contribution).
+Update Sum: Multiply sum by 10 and add root->val (to concatenate digits).
+Leaf Node Case: If root is a leaf (no left/right children), return sum as a valid number.
+Recursive Calls: Sum up the results from the left and right subtrees.
+Code:
+int help(TreeNode* root, int sum) {
+    if (!root) return 0;  // Base case
+    sum = sum * 10 + root->val;  // Append current node's value
+    if (!root->left && !root->right) return sum;  // Leaf node, return sum
+    return help(root->left, sum) + help(root->right, sum);  // Recursive calls
+}
+Step 3: Call the Helper Function from sumNumbers
+sumNumbers(TreeNode* root) simply calls help(root, 0).
+The initial sum is 0, which gets updated as we traverse the tree.
+Code:
+int sumNumbers(TreeNode* root) {
+    return help(root, 0);
+}
+Step 4: Time Complexity Analysis
+The function visits each node once → O(N), where N is the number of nodes.
+Space complexity (recursion stack) O(H), where H is the tree height.
+O(log N) for a balanced tree.
+O(N) for a skewed tree.
+Final Summary
+Use DFS to traverse the tree.
+Maintain sum, treating it as a number (multiplying by 10 at each step).
+If at a leaf, return the computed number.
+Sum all root-to-leaf numbers recursively.
+Return the total sum from sumNumbers(root).
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+int help(TreeNode*root,int sum)
+{
+    if(!root)
+    return 0;
+    sum=sum*10+root->val;
+    if(!root->left&&!root->right)
+    return sum;
+    return help(root->left,sum)+help(root->right,sum);
+}
+    int sumNumbers(TreeNode* root) {
+        return help(root,0);
+    }
+};
