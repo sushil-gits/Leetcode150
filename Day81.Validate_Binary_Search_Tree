@@ -1,0 +1,113 @@
+Stepwise Approach for isValidBST (Checking if a Binary Tree is a Valid BST)
+This function verifies whether a given binary tree is a valid binary search tree (BST) using recursion and range validation.
+
+Step 1: Understand the BST Property
+A Binary Search Tree (BST) follows these rules:
+
+Left subtree values must be less than the current node’s value.
+
+Right subtree values must be greater than the current node’s value.
+
+Each subtree must also be a valid BST.
+
+Step 2: Define the Recursive Function check
+The helper function:
+bool check(TreeNode* root, long long mini, long long maxi)
+Takes three arguments:
+
+root: The current node.
+
+mini: The minimum allowed value for the current node.
+
+maxi: The maximum allowed value for the current node.
+
+The function checks whether root->val lies within the valid range (mini, maxi).
+
+Recursively checks the left and right subtrees:
+
+Left subtree values must be less than root->val.
+
+Right subtree values must be greater than root->val.
+
+Step 3: Base Case (Stopping Condition)
+If the node is NULL, return true (an empty tree is a valid BST).
+if (!root) return true;
+Step 4: Check the Current Node
+If root->val violates the BST condition, return false:
+if (root->val <= mini || root->val >= maxi) return false;
+Step 5: Recursive Calls for Left and Right Subtrees
+For the left subtree:
+
+The new maximum (maxi) is the current node’s value (root->val).
+check(root->left, mini, root->val)
+For the right subtree:
+
+The new minimum (mini) is the current node’s value (root->val).
+check(root->right, root->val, maxi)
+The function returns true only if both subtrees are valid BSTs:
+return check(root->left, mini, root->val) && check(root->right, root->val, maxi);
+Step 6: Call the check Function from isValidBST
+The function isValidBST calls check with initial range set to (-∞, +∞) using LLONG_MIN and LLONG_MAX:
+bool isValidBST(TreeNode* root) {
+    return check(root, LLONG_MIN, LLONG_MAX);
+}
+This ensures the entire tree is checked for BST validity.
+
+Time and Space Complexity
+Time Complexity: 
+𝑂
+(
+𝑁
+)
+O(N) (each node is visited once).
+
+Space Complexity: 
+𝑂
+(
+𝐻
+)
+O(H) (recursion stack height, where H is the tree height, worst case 
+𝑂
+(
+𝑁
+)
+O(N) for skewed trees).
+
+Summary of Steps
+Base case: If root is NULL, return true.
+
+Check BST condition: If root->val is outside (mini, maxi), return false.
+
+Recursively check left subtree with updated maxi (root->val).
+
+Recursively check right subtree with updated mini (root->val).
+
+Return true only if both subtrees are valid BSTs.
+
+Start validation from isValidBST with the full integer range.
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+bool check(TreeNode*root,long long mini,long long maxi)
+{
+    if(!root)
+    return true;
+    if(root->val<=mini||root->val>=maxi)
+    return false;
+    return check(root->left,mini,root->val)&&check(root->right,root->val,maxi);
+}
+    bool isValidBST(TreeNode* root) {
+     return check(root,LLONG_MIN,LLONG_MAX);   
+    }
+};
