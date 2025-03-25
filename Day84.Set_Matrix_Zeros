@@ -1,0 +1,109 @@
+Stepwise Explanation of setZeroes Function
+This function modifies a given matrix such that if any element is 0, its entire row and column are set to 0. The solution uses O(1) space (no extra matrix) by leveraging the first row and first column to mark which rows and columns should be zeroed out.
+
+Step 1: Initialize Variables
+m = Number of columns (matrix[0].size())
+
+n = Number of rows (matrix.size())
+
+c = 1 (Flag to track if the first column needs to be zeroed out later)
+
+Step 2: Mark Zero Positions in the First Row and Column
+Traverse the entire matrix:
+
+If matrix[i][j] == 0:
+
+Mark the corresponding column (j) in the first row (matrix[0][j] = 0)
+(Except if j == 0, because matrix[0][0] is used for rows too.)
+
+Mark the corresponding row (i) in the first column (matrix[i][0] = 0)
+(If j == 0, set c = 0 to indicate the first column should be zeroed later.)
+
+Example:
+
+Copy
+Original Matrix:
+[1, 1, 1]
+[1, 0, 1]
+[1, 1, 1]
+
+After marking:
+First row: [1, 0, 1] (since `matrix[1][1] = 0`)
+First column: [1, 0, 1] (since `matrix[1][1] = 0`)
+`c` remains `1` (since no zero was in the first column)
+Step 3: Zero Out Cells Based on Marks (Except First Row & Column)
+Traverse from (1,1) to (n-1, m-1):
+
+If matrix[0][j] == 0 (column marked) or matrix[i][0] == 0 (row marked):
+
+Set matrix[i][j] = 0.
+
+Example (Continued):
+After zeroing based on marks:
+[1, 0, 1]
+[0, 0, 0] (since `matrix[1][0] = 0` affects entire row)
+[1, 0, 1] (since `matrix[0][1] = 0` affects entire column)
+Step 4: Zero Out the First Row if Needed
+If matrix[0][0] == 0 (indicating the first row should be zeroed):
+
+Set all matrix[0][j] = 0 for j = 1 to m-1.
+
+Example (Not Applied Here):
+If matrix[0][0] was 0, the first row would be zeroed.
+
+Step 5: Zero Out the First Column if Needed
+If c == 0 (indicating there was a 0 in the first column):
+
+Set all matrix[i][0] = 0 for i = 0 to n-1.
+
+Example (Not Applied Here):
+If c was 0, the first column would be zeroed.
+
+Final Output
+Copy
+Modified Matrix:
+[1, 0, 1]
+[0, 0, 0]
+[1, 0, 1]
+Key Observations
+Space Optimization: Uses the first row and column for marking instead of extra storage.
+
+Special Handling for First Column: Since matrix[0][0] overlaps for both row and column marking, c is used to track the first column separately.
+
+Efficiency: O(n × m) time complexity (optimal) and O(1) space.
+
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int m=matrix[0].size();
+        int n=matrix.size();
+        int c=1;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(matrix[i][j]==0){
+                    if(j!=0)matrix[0][j]=0;
+                    else c=0;
+                    matrix[i][0]=0;
+                }
+            }
+        }
+        for(int i=1;i<n;i++){
+            for(int j=1;j<m;j++){
+                if(matrix[0][j]==0||matrix[i][0]==0){
+                    matrix[i][j]=0;
+                }
+            }
+        }
+        if(matrix[0][0]==0){
+            for(int j=1;j<m;j++){
+                matrix[0][j]=0;
+            }
+        }
+        if(c==0){
+            for(int i=0;i<n;i++){
+                matrix[i][0]=0;
+            }
+        }
+    }
+};
