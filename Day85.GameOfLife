@@ -1,0 +1,114 @@
+Stepwise Approach for gameOfLife Function
+The function gameOfLife simulates Conway's Game of Life, updating a board according to specific rules. Since the update is in-place (without using extra space for a copy of the board), a bitwise approach is used.
+
+Step 1: Understand the Rules of Game of Life
+Each cell has two possible states:
+
+1 (Alive)
+
+0 (Dead)
+
+For each cell (i, j), we count the number of alive neighbors. Based on this count, the new state is determined:
+
+Alive Cell (1) Rules:
+
+Less than 2 alive neighbors: Dies (0) due to underpopulation.
+
+2 or 3 alive neighbors: Lives (1) to the next state.
+
+More than 3 alive neighbors: Dies (0) due to overpopulation.
+
+Dead Cell (0) Rules:
+
+Exactly 3 alive neighbors: Becomes alive (1) due to reproduction.
+
+Step 2: Encoding the New State Using Bitwise Operations
+To modify the board in-place without losing the current state, we use bit manipulation:
+
+The least significant bit (board[i][j] & 1) represents the current state.
+
+The second bit (board[i][j] & 2) stores the next state.
+
+Encoding:
+
+If a cell was alive and stays alive → board[i][j] |= 0b10
+
+If a cell was dead and becomes alive → board[i][j] |= 0b10
+
+Step 3: Iterate Over the Board
+First Pass: Calculate the next state:
+
+Count ones (alive neighbors) using a nested loop.
+
+Update the board using bitwise operations.
+
+Second Pass: Update the board to its next state:
+
+Right shift board[i][j] >>= 1 to apply the new state.
+
+Step 4: Implementation Breakdown
+First Pass (Marking the Next State)
+Iterate through the board.
+
+Count live neighbors using a nested loop.
+
+Use bitwise operations to mark the new state.
+
+Second Pass (Applying the Next State)
+Right shift board[i][j] >>= 1 to update the board.
+
+Time Complexity Analysis
+Counting neighbors: O(1) per cell.
+
+Traversing the board: O(m × n).
+
+Overall complexity: O(m × n).
+
+Example Walkthrough
+Input:
+board = {
+  {0, 1, 0},
+  {0, 0, 1},
+  {1, 1, 1},
+  {0, 0, 0}
+};
+Step 1: First Pass (Marking)
+Using bitwise operations, the board is updated to:
+{0,  1, 0}
+{0,  0, 1}
+{1,  1, 1}
+{0,  0, 0}
+Becomes (with second bit set):
+{0,  3, 0}
+{0,  0, 3}
+{3,  3, 2}
+{0,  2, 0}
+Step 2: Second Pass (Updating)
+Right-shifting the board gives:
+{0, 1, 0}
+{0, 0, 1}
+{1, 1, 1}
+{0, 0, 0}
+The board is updated in-place correctly.
+
+class Solution {
+ public:
+  void gameOfLife(vector<vector<int>>& board) {
+    const int m = board.size();
+    const int n = board[0].size();
+    for (int i = 0; i < m; ++i)
+      for (int j = 0; j < n; ++j) {
+        int ones = 0;
+        for (int x = max(0, i - 1); x < min(m, i + 2); ++x)
+          for (int y = max(0, j - 1); y < min(n, j + 2); ++y)
+            ones += board[x][y] & 1;
+        if (board[i][j] == 1 && (ones == 3 || ones == 4))
+          board[i][j] |= 0b10;
+        if (board[i][j] == 0 && ones == 3)
+          board[i][j] |= 0b10;
+      }
+    for (int i = 0; i < m; ++i)
+      for (int j = 0; j < n; ++j)
+        board[i][j] >>= 1;
+  }
+};
