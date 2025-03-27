@@ -1,0 +1,88 @@
+Stepwise Approach for Node* connect(Node* root)
+The function connects all nodes at the same level in a binary tree using a level-order traversal approach (BFS) with a queue.
+
+Step 1: Base Condition
+If the root is NULL, return NULL immediately.
+
+Step 2: Initialize a Queue
+Create a queue (q) to store nodes for level-order traversal.
+
+Push the root node into the queue.
+
+Push NULL into the queue to act as a marker for the end of a level.
+
+Step 3: Process Nodes Level by Level
+While there is more than one element in the queue:
+
+Extract the Front Node:
+
+Pop the front node (curr) from the queue.
+
+Check for NULL:
+
+If curr is NULL:
+
+Push another NULL to indicate the end of the next level.
+
+Use continue to process the next node.
+
+Set Next Pointer:
+
+Assign curr->next = q.front(), linking the node to the next node at the same level.
+
+Push Child Nodes:
+
+If curr has a left child, push curr->left into the queue.
+
+If curr has a right child, push curr->right into the queue.
+
+Step 4: Return the Root
+After processing all nodes, return the root.
+
+
+
+
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+    Node* next;
+
+    Node() : val(0), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val) : val(_val), left(NULL), right(NULL), next(NULL) {}
+
+    Node(int _val, Node* _left, Node* _right, Node* _next)
+        : val(_val), left(_left), right(_right), next(_next) {}
+};
+*/
+
+class Solution {
+public:
+    Node* connect(Node* root) {
+       if(!root)
+       return 0;
+       queue<Node*>q;
+       q.push(root);
+       q.push(NULL);
+       while(q.size()>1)
+       {
+        Node*curr=q.front();
+        q.pop();
+        if(!curr)
+        {
+            q.push(NULL);
+            continue;
+        }
+        curr->next=q.front();
+        if(curr->left)
+        q.push(curr->left);
+        if(curr->right)
+        q.push(curr->right);
+        } 
+               return root;
+    }
+};
