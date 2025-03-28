@@ -1,0 +1,106 @@
+Problem Statement
+You are climbing a staircase with n steps.
+You can either take 1 step or 2 steps at a time.
+Find the number of distinct ways to climb to the top.
+
+Step-by-Step Code Solution
+
+int climbStairs(int n) {
+Step 1: Handle Base Cases
+If n is very small, return the result directly:
+
+If n == 1, there is only 1 way (just 1 step).
+
+If n == 2, there are 2 ways (1+1 or 2).
+
+    if (n == 1) return 1;
+    if (n == 2) return 2;
+Step 2: Initialize Variables
+Since the number of ways to reach step n is the sum of the ways to reach n-1 and n-2,
+we initialize:
+
+first = 1 → Represents ways to reach step 1.
+
+second = 2 → Represents ways to reach step 2.
+
+result = 0 → Stores the computed results iteratively.
+
+    int first = 1, second = 2;
+    int result = 0;
+Step 3: Use Iteration to Compute Results
+We iterate from step 3 to step n using a loop.
+
+The number of ways to reach the i-th step is first + second (like Fibonacci numbers).
+
+Update first and second for the next iteration.
+
+    for (int i = 3; i <= n; ++i) {
+        result = first + second;  // Compute ways for current step
+        first = second;           // Move first to second
+        second = result;          // Move second to result
+    }
+Step 4: Return Final Result
+Once the loop finishes, result holds the number of ways to reach step n.
+    return result;
+}
+Final Code
+#include <iostream>
+using namespace std;
+
+int climbStairs(int n) {
+    if (n == 1) return 1;
+    if (n == 2) return 2;
+
+    int first = 1, second = 2;
+    int result = 0;
+
+    for (int i = 3; i <= n; ++i) {
+        result = first + second;  // Compute ways for current step
+        first = second;           // Move first to second
+        second = result;          // Move second to result
+    }
+
+    return result;
+}
+
+// Driver Code
+int main() {
+    int n = 5;  // Example: Climbing 5 steps
+    cout << "Ways to climb " << n << " stairs: " << climbStairs(n) << endl;
+    return 0;
+}
+Example Walkthrough
+Input:
+n = 5
+Stepwise Computation:
+Step	first	second	result (new ways)
+3	1	2	1 + 2 = 3
+4	2	3	2 + 3 = 5
+5	3	5	3 + 5 = 8
+Output:
+Ways to climb 5 stairs: 8
+Time Complexity Analysis
+The loop runs (n - 2) times, which is O(n).
+
+This solution only uses 3 variables, making it O(1) space complexity.
+
+
+
+class Solution {
+public:
+    int climbStairs(int n) {
+        if (n == 1) return 1;
+        if (n == 2) return 2;
+
+        int first = 1, second = 2;
+        int result = 0;
+
+        for (int i = 3; i <= n; ++i) {
+            result = first + second;  // Calculate the current result
+            first = second;           // Move to the next step
+            second = result;          // Update the second value
+        }
+
+        return result;
+    }
+};
