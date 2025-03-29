@@ -1,0 +1,136 @@
+Stepwise Approach for averageOfLevels(TreeNode* root)
+The function calculates the average value of nodes at each level in a binary tree using Breadth-First Search (BFS). Let's break it down step by step:
+
+Step 1: Initialize Required Data Structures
+vector<double> ans;         // Stores the final average of each level
+queue<TreeNode*> q{{root}}; // Queue to perform level-order traversal (BFS)
+We create a vector ans to store the average of each level.
+
+We use a queue q, initialized with the root node, to process the tree level by level.
+
+Step 2: Perform BFS Level-Order Traversal
+while (!q.empty()) { ... }
+BFS (Breadth-First Search) is used to traverse the tree level by level.
+
+The loop runs until all nodes are processed.
+
+Step 3: Process Each Level
+long sum = 0;
+const int size = q.size();
+sum: Stores the sum of node values at the current level.
+
+size: Stores the number of nodes at the current level.
+
+Step 4: Process Nodes at Current Level
+for (int i = 0; i < size; ++i) {
+    TreeNode* node = q.front();
+    q.pop();
+    sum += node->val;
+Loop through all nodes in the current level (size times).
+
+Dequeue a node from the queue (q.front(), q.pop()).
+
+Add the node’s value to sum.
+
+Step 5: Enqueue Left and Right Children (If Exists)
+if (node->left)
+    q.push(node->left);
+if (node->right)
+    q.push(node->right);
+If the left child exists, push it into the queue.
+
+If the right child exists, push it into the queue.
+
+This ensures that the next level nodes will be processed in the next iteration.
+
+Step 6: Compute and Store the Average
+ans.push_back(sum / (double)size);
+Compute the average of the current level:
+
+Average
+=
+Sum of level nodes
+Total nodes at level
+Average= 
+Total nodes at level
+Sum of level nodes
+​
+ 
+Store the result in ans.
+
+Step 7: Return the Final Result
+return ans;
+Return the list of averages of each level.
+
+Time & Space Complexity
+Time Complexity: 
+𝑂
+(
+𝑁
+)
+O(N), where 
+𝑁
+N is the number of nodes (as we visit each node once).
+
+Space Complexity: 
+𝑂
+(
+𝑁
+)
+O(N), as we store at most one level of nodes in the queue.
+
+Example Walkthrough
+Input:
+       3
+      / \
+     9  20
+       /  \
+      15   7
+Processing:
+Level	Nodes	Sum	Average
+1	3	3	3.0
+2	9, 20	29	14.5
+3	15, 7	22	11.0
+Output:
+{3.0, 14.5, 11.0}
+Final Thoughts
+✅ Uses BFS (Queue) for level-wise traversal
+✅ Efficient: Each node is visited once
+✅ Handles large trees without extra recursion depth
+
+
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<double> averageOfLevels(TreeNode* root) {
+         vector<double> ans;
+    queue<TreeNode*> q{{root}};
+    while (!q.empty()) {
+      long sum = 0;
+      const int size = q.size();
+      for (int i = 0; i < size; ++i) {
+        TreeNode* node = q.front();
+        q.pop();
+        sum += node->val;
+        if (node->left)
+          q.push(node->left);
+        if (node->right)
+          q.push(node->right);
+      }
+      ans.push_back(sum / (double)size);
+    }
+    return ans;
+    }
+};
