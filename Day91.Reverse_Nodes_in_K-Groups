@@ -1,0 +1,149 @@
+Stepwise Approach for Reversing Nodes in K-Groups
+The given function reverses nodes in groups of size k in a linked list. Let’s break it down step by step.
+
+Step 1: Understanding the Function krev
+The function krev is a recursive function that reverses k nodes at a time.
+
+Function Signature:
+ListNode* krev(ListNode* head, int k)
+Parameters:
+head: Pointer to the first node of the current segment of the linked list.
+
+k: Number of nodes to reverse at a time.
+
+Execution Flow:
+Base Case:
+if(head == NULL) {
+    return NULL;
+}
+If the head is NULL, return NULL (end of the list).
+
+Check if there are at least k nodes left:
+ListNode* check = head;
+for (int i = 0; i < k; ++i) {
+    if (!check) return head; // Not enough nodes left, return head
+    check = check->next;
+}
+If there are fewer than k nodes left, return head as we don’t reverse this segment.
+
+Initialize pointers:
+ListNode* next = NULL;
+ListNode* curr = head;
+ListNode* prev = NULL;
+int cnt = 0;
+curr: Tracks the current node.
+
+prev: Tracks the previous node (used for reversing links).
+
+next: Stores the next node to move forward.
+
+cnt: Counts the number of nodes reversed.
+
+Reverse the first k nodes:
+while(curr != NULL and cnt < k){
+    next = curr -> next;
+    curr -> next = prev;
+    prev = curr;
+    curr = next;
+    cnt++;
+}
+Reverse the links of k nodes.
+
+Move forward by updating pointers.
+
+Recursively reverse the remaining nodes:
+if(next != NULL){
+    head -> next = krev(next, k);
+}
+The new head of this segment (previous head) connects to the result of the next recursive call.
+
+Return the new head (prev):
+return prev;
+After reversing, prev becomes the new head of this segment.
+
+Step 2: Understanding reverseKGroup
+ListNode* reverseKGroup(ListNode* head, int k) {
+    return krev(head, k);
+}
+This function calls krev on the entire linked list, initiating the reversal process.
+
+Step 3: Example Execution
+Input Linked List:
+1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
+k = 3
+Step-by-Step Execution:
+Reverse first 3 nodes:
+3 → 2 → 1 → 4 → 5 → 6 → 7 → 8
+Reverse next 3 nodes:
+3 → 2 → 1 → 6 → 5 → 4 → 7 → 8
+Reverse the remaining 2 nodes:
+3 → 2 → 1 → 6 → 5 → 4 → 8 → 7
+Final Output:
+3 → 2 → 1 → 6 → 5 → 4 → 8 → 7
+Step 4: Time Complexity Analysis
+Each node is visited once and reversed once.
+
+The function recursively processes n/k groups.
+
+Time Complexity: O(N) (each node is processed once).
+
+Space Complexity: O(N/k) (recursive calls stack for n/k groups).
+
+Final Summary
+Check if at least k nodes exist; if not, return head.
+
+Reverse k nodes iteratively.
+
+Recursively reverse the next segment.
+
+Connect the reversed segments.
+
+Return the new head of the reversed list.
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* krev(ListNode* head, int k){
+        if(head == NULL){
+            return NULL;
+        }
+        ListNode* next = NULL;
+        ListNode* curr = head;
+        ListNode* prev = NULL;
+        int cnt = 0;
+
+        ListNode* check = head;
+        for (int i = 0; i < k; ++i) {
+            if (!check) return head; // Not enough nodes left, return head
+            check = check->next;
+        }
+        while(curr != NULL and cnt < k){
+            next = curr -> next;
+            curr -> next = prev;
+            prev = curr;
+            curr = next;
+            cnt++;
+        }
+        if(next != NULL){
+            head -> next = krev(next, k);
+        }
+        return prev;
+    }
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        return krev(head,k);
+        
+    }
+};
+
+
+                          
